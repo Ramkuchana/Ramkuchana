@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sai Ram Kuchana",
+    "section": "",
+    "text": "Linkedin\n  \n  \n    \n     Email\n  \n\n  \n  \nHi, I’m Ram!\nI have newly developed passion for Data Science and Coding. Here, I post my projects whenever i have done something and got time."
+  },
+  {
+    "objectID": "index.html#projects",
+    "href": "index.html#projects",
+    "title": "Sai Ram Kuchana",
+    "section": "Projects",
+    "text": "Projects\n\n\n\n\n\n\n\n\n\n\nNearest neighbor for handwritten digit recognition\n\n\n\nNumPy\n\n\nMatplotlib\n\n\nscikit-learn\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/MNIST/omnist.html",
+    "href": "projects/MNIST/omnist.html",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "",
+    "text": "In this project we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Specifically, we will look at a simple strategy for this problem known as the nearest neighbor(NN) classifier."
+  },
+  {
+    "objectID": "projects/MNIST/omnist.html#k-d-tree-algorithm",
+    "href": "projects/MNIST/omnist.html#k-d-tree-algorithm",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "4.1 k-d tree algorithm",
+    "text": "4.1 k-d tree algorithm\nThe key advantage of the k-d tree is its ability to significantly reduce the number of distance calculations needed during a nearest neighbor search by efficiently pruning regions of the search space. This algorithm is based on the triangle inequality, utilizing the fact that if point ‘a’ is significantly far from point ‘b,’ and point ‘b’ is in close proximity to point ‘c,’ we can infer that points ‘a’ and ‘c’ are also distant from each other without explicitly calculating their distance. This way, the computational cost of a nearest neighbors search can be reduced to \\(O(dNlog(N))\\) or better.\nAfter implementing k-d tree algorithm, we get a classification time of about 5-6 seconds, which is drastically less than baseline NN classifier."
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html",
+    "href": "projects/MNIST/mnist.html",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "",
+    "text": "In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Specifically, we will look at a simple strategy for this problem known as the nearest neighbor(NN) classifier."
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#dimensions-of-the-training-and-the-test-set",
+    "href": "projects/MNIST/mnist.html#dimensions-of-the-training-and-the-test-set",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "2.1 Dimensions of the training and the test set",
+    "text": "2.1 Dimensions of the training and the test set\n\n\nCode\n## Print out their dimensions\n\nprint(\"Training dataset dimensions: \", np.shape(train_data))\nprint(\"Number of training labels: \", len(train_labels), end='\\n\\n')\n\nprint(\"Testing dataset dimensions: \", np.shape(test_data))\nprint(\"Number of testing labels: \", len(test_labels))\n\n\nTraining dataset dimensions:  (7500, 784)\nNumber of training labels:  7500\n\nTesting dataset dimensions:  (1000, 784)\nNumber of testing labels:  1000\n\n\nEach data point, i.e., a handwritten digit image in the dataset, is composed of 784 pixels and is stored as a vector with 784 coordinates/dimensions, where each coordinate has a numeric value ranging from 0 to 255.\nLet us look at these numeric values by examining one of the images, say, the first image, in the dataset.\n\n\nCode\n# print out the the first data point in training data\n\ntrain_data[0] \n\n\narray([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,  49., 138., 243., 255., 154.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   9., 197., 252.,\n       252., 253., 236., 161.,  50.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0., 130., 252., 227., 130., 190., 252., 252., 227.,\n        48.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 155., 236., 227.,\n        50.,   0.,   5.,  83., 252., 252., 137.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,  53., 253., 252., 130.,   0.,   0.,   0.,  26., 221.,\n       252., 242., 158.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 127., 255., 228.,\n        32.,   0.,   0.,   0.,   0., 185., 253., 253., 231.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0., 230., 253., 132.,   0.,   0.,   0.,   0.,   0.,\n       111., 252., 252., 230.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 230., 253.,\n        92.,   0.,   0.,   0.,   0.,   0., 153., 252., 252., 199.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0., 230., 253.,  92.,   0.,   0.,   0.,   0.,\n        17., 209., 252., 252.,  74.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 126.,\n       253., 196.,   0.,   0.,   0.,   0.,  99., 252., 252., 252.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0., 255., 253., 222.,  97.,  24.,\n        87., 212., 253., 253., 190.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0., 159., 252., 252., 252., 252., 253., 252., 252., 252., 137.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   7., 141., 183., 183.,\n       246., 215., 196., 252., 252., 137.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,  42.,  21.,  47., 252., 252.,\n       137.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,  47., 252., 252., 137.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  47., 253.,\n       253., 137.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,  47., 252., 252., 137.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  47.,\n       252., 252., 137.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,  47., 252., 252., 137.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         5., 137., 252.,  85.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,\n         0.,   0.,   0.], dtype=float32)"
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#compute-the-number-of-images-of-each-digit-in-the-dataset",
+    "href": "projects/MNIST/mnist.html#compute-the-number-of-images-of-each-digit-in-the-dataset",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "2.2 Compute the number of images of each digit in the dataset",
+    "text": "2.2 Compute the number of images of each digit in the dataset\n\n\nCode\n## Compute the number of images of each digit in the training ans test dataset\n\n\ntrain_digits, train_counts = np.unique(train_labels, return_counts=True)\nprint(\"Training set distribution:\")\nprint(dict(zip(train_digits, train_counts)), end='\\n\\n')\n\ntest_digits, test_counts = np.unique(test_labels, return_counts=True)\nprint(\"Test set distribution:\")\nprint(dict(zip(test_digits, test_counts)))\n\n\nTraining set distribution:\n{0: 750, 1: 750, 2: 750, 3: 750, 4: 750, 5: 750, 6: 750, 7: 750, 8: 750, 9: 750}\n\nTest set distribution:\n{0: 100, 1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100, 7: 100, 8: 100, 9: 100}\n\n\nSo in the training set, we have 750 images of digits 0-9 each, totaling 7500 images. In the test set, we have 100 images of digits 0-9 each, with a total of 1000 images."
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#view-the-first-data-point-in-the-training-set-and-test-set",
+    "href": "projects/MNIST/mnist.html#view-the-first-data-point-in-the-training-set-and-test-set",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "3.1 View the first data point in the training set and test set",
+    "text": "3.1 View the first data point in the training set and test set\nNow that we have defined a function for visualizing the image, let’s see it in action by applying it to the first data points of the dataset.\n\n\nCode\n## View the first data point in the training set\n\nvis_image(0, \"train\")\n\n\n\n\n\n            Label 9\n\n\n\n\nCode\n## Now view the first data point in the test set\n\nvis_image(0, \"test\")\n\n\n\n\n\n            Label 0"
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#examples-of-computing-squared-euclidean-distance",
+    "href": "projects/MNIST/mnist.html#examples-of-computing-squared-euclidean-distance",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "4.1 Examples of computing squared Euclidean distance",
+    "text": "4.1 Examples of computing squared Euclidean distance\n\n\nCode\nprint('Examples:\\n')\n\n## Computing distances between digits in our training set.\n\nprint(f\"Distance from digit {train_labels[4]} to digit {train_labels[5]} in our training set: {squared_dist(train_data[4],train_data[5])}\")\n\nprint(f\"Distance from digit {train_labels[4]} to digit {train_labels[1]} in our training set: {squared_dist(train_data[4],train_data[1])}\")\n\nprint(f\"Distance from digit {train_labels[4]} to digit {train_labels[7]} in our training set: {squared_dist(train_data[4],train_data[7])}\")\n\n\nExamples:\n\nDistance from digit 7 to digit 1 in our training set: 5357193.0\nDistance from digit 7 to digit 2 in our training set: 12451684.0\nDistance from digit 7 to digit 7 in our training set: 5223403.0"
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#compute-the-classification-time-of-nn",
+    "href": "projects/MNIST/mnist.html#compute-the-classification-time-of-nn",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "6.1 Compute the classification time of NN",
+    "text": "6.1 Compute the classification time of NN\nSince the nearest neighbor classifier goes through the entire training set of 7500 images, searching for the nearest neighbor image for every single test image in the dataset of 1000 images, we should not expect testing to be very fast.\n\n\nCode\n## Compute the classification time of NN classifier\n\nprint(f\"Classification time of NN classifier: {round(t_after - t_before, 2)} sec\")\n\n\nClassification time of NN classifier: 34.33 sec"
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#compute-the-error-rate-of-nn",
+    "href": "projects/MNIST/mnist.html#compute-the-error-rate-of-nn",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "6.2 Compute the error rate of NN",
+    "text": "6.2 Compute the error rate of NN\n\n\nCode\n## Compute the error rate \n\nerr_positions = np.not_equal(test_predictions, test_labels)\nerror = float(np.sum(err_positions))/len(test_labels)\n\nprint(f\"Error rate of nearest neighbor classifier: {error * 100}%\")\n\n\nError rate of nearest neighbor classifier: 4.6%\n\n\nThe error rate of the NN classifier is 4.6%. This means that out of the 1000 points, NN misclassifies 46 of them. That’s not too bad for such a simple method."
+  },
+  {
+    "objectID": "projects/MNIST/mnist.html#k-d-tree-algorithm",
+    "href": "projects/MNIST/mnist.html#k-d-tree-algorithm",
+    "title": "Nearest neighbor classifier for handwritten digit recognition",
+    "section": "7.1 k-d tree algorithm",
+    "text": "7.1 k-d tree algorithm\nThe key advantage of the k-d tree is its ability to significantly reduce the number of distance calculations needed during a nearest neighbor search by efficiently pruning regions of the search space. This algorithm is based on the triangle inequality, utilizing the fact that if point ‘a’ is significantly far from point ‘b,’ and point ‘b’ is in close proximity to point ‘c,’ we can infer that points ‘a’ and ‘c’ are also distant from each other without explicitly calculating their distance.\nThis way, the computational cost of a nearest neighbors search can be reduced to \\(O(dNlog(N))\\) or better.\n\n\nCode\n## Build nearest neighbor structure on training data\n\nt_before = time.time()\nkd_tree = KDTree(train_data)\nt_after = time.time()\n\n## Compute training time\nt_training = t_after - t_before\nprint(f\"Time to build data structure: {round(t_training, 2)} sec\")\n\n## Get nearest neighbor predictions on testing data\nt_before = time.time()\ntest_neighbors = np.squeeze(kd_tree.query(test_data, k=1, return_distance=False))\nkd_tree_predictions = train_labels[test_neighbors]\nt_after = time.time()\n\n## Compute testing time\nt_testing = t_after - t_before\nprint(f\"Time to classify test set: {round(t_testing, 2)} sec\", end = '\\n\\n')\n\n## total classification time\n\nprint(f\"Overall classification time of k-d tree algorithm: {round(t_training+t_testing, 2)} sec\")\n\n\n## Verify that the predictions are the same\nprint(\"Does k-d tree produce same predictions as NN classifier? \", np.array_equal(test_predictions, kd_tree_predictions))\n\n\nTime to build data structure: 0.63 sec\nTime to classify test set: 5.3 sec\n\nOverall classification time of k-d tree algorithm: 5.93 sec\nDoes k-d tree produce same predictions as NN classifier?  True\n\n\nWe can see that the baseline nearest neighbor model and the k-d tree algorithm produce the same predictions, but the key difference is that the k-d tree is significantly faster than the former."
+  }
+]
