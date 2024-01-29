@@ -50,7 +50,7 @@ listing:
 Hi, I'm Ram!
 
 
-I have newly developed passion for Data Science and Coding.<br>
+I have newly developed passion for Data Science and Coding.
 Here, I post my projects whenever i have done something new and got time.
 
 :::
