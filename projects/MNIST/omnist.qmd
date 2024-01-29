@@ -94,6 +94,6 @@ despite employing a brute-force search approach and using a basic distance measu
 
 We have also seen how the k-d tree algorithm can be used to speed up the search process, thereby making it feasible for the nearest neighbor classifier to be applied to larger datasets.
 
-[Please click here for the detailed project.](https://ramkuchana.github.io)
+[Please click here for the detailed project.](https://ramkuchana.github.io/Ramkuchana/projects/MNIST/mnist.html)
 
 
