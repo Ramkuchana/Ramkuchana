@@ -2,7 +2,12 @@
   {
     "listing": "/index.html",
     "items": [
-      "projects/MNIST/omnist.html"
+      "projects/NimGame/NimGame.html",
+      "projects/MNIST/mnist.html",
+      "projects/ParseTrees/ParsetreesNnounphrases.html",
+      "projects/SQLPackages/packages.html",
+      "projects/SQLMuseum/mfa.html",
+      "projects/Salesdashboard/salesdashboard.html"
     ]
   }
 ]

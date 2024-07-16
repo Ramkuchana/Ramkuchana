@@ -1,0 +1,4 @@
+- title: Building a dashboard for the sales using Tableau
+  path: projects/Salesdashboard/salesdashboard.qmd
+  image: projects/Salesdashboard/DashboardGIF.gif
+  categories: [Tableau]

@@ -10,7 +10,6 @@ jupyter: python3
 website:
 
   page-navigation: true
-  repo-url: https://github.com
   
   reader-mode: false
   back-to-top-navigation: true
@@ -25,7 +24,7 @@ website:
     tools:
       - icon: linkedin
         text: Linkedin
-        href: https://www.linkedin.com/in/ram-kuchana/
+        href: https://www.linkedin.com/in/ramkuchana/
 #      - icon: github
 #        text: GitHub
 #        href: https://github.com
@@ -35,8 +34,6 @@ website:
         
 
     left:
-      - text: "Projects' overview"
-        file: projects/MNIST/omnist.qmd
    
       - text: "Projects"
         file: projects/MNIST/mnist.qmd
@@ -48,7 +45,22 @@ website:
   sidebar:
 
     
-    - title: "Projects' overview"
+#    - title: "Projects' overview"
+    
+#      style: "floating"
+#      alignment: left
+#      border: true
+#    background: light
+#      search: false
+      
+#      contents:
+#        - section: "Overview of the projects"
+#          contents:
+#            - projects/MNIST/omnist.qmd
+ 
+            
+
+    - title: "Projects"
     
       style: "floating"
       alignment: left
@@ -56,17 +68,27 @@ website:
 #    background: light
       search: false
       
-      contents:
-        - section: "Overview of the projects"
-          contents:
-            - projects/MNIST/omnist.qmd
-
-    - title: "Projects"
     
       contents:
-        - section: "Projects"
+        - section: "SQL Projects"
+          contents:
+            - projects/SQLPackages/packages.qmd
+            - projects/SQLMuseum/mfa.qmd
+
+        - section: "Tableau Projects"
+          contents:
+            - projects/Salesdashboard/salesdashboard.qmd
+            
+        - section: "NLP Projects"
+          contents:
+            - projects/ParseTrees/ParsetreesNnounphrases.qmd       
+    
+        - section: "ML Projects"
           contents:
             - projects/MNIST/mnist.qmd
+            - projects/NimGame/NimGame.qmd
+            
+
 
 
 format:
@@ -78,8 +100,6 @@ format:
 #    monofont: Source Sans Pro, sans-serif
 
   
-
-    
     toc: true
     toc-title: Table of contents
     

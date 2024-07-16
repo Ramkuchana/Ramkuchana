@@ -1,59 +1,170 @@
 ---
-title: Nearest neighbor classifier for handwritten digit recognition
+title: 1. Nearest neighbor classifier for handwritten digit recognition
 jupyter: python3
 ---
 
 <br>
-In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Specifically, we will look at a simple strategy for this problem known as the **nearest neighbor(NN) classifier**.
-
+In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Specifically, we will explore a simple strategy for this problem known as the nearest neighbor(NN) classifier.
+Then, we will look at how to improve the NN classifier.
 
 # The MNIST dataset
 
-
-We will use the `MNIST` dataset, which is a classic dataset in machine learning, to train our nearest neighbor classifier. It consists of 28x28 grayscale images of handwritten digits, along with corresponding labels (0 through 9) indicating the digit each image represents.
-The original MNIST training set contains 60,000 images, and the test set contains 10,000 images. However, in this project, we will work with a subset of this data, prepared beforehand for easy computational purposes. Here is the dataset we will use:
-
-* A training set comprising 7,500 images, and
-* A test set consisting of 1,000 images.
-
-
-If x is the vector representing an image and y is the corresponding label, then:
-
-* Data space: $x \in \mathbb{R}^{784}$, a 784-dimensional vector consisting of numeric values ranging from 0 to 255.
-* Label space: $y = \{0.....9\}$, representing the label of the image.
-
-    
-
+We will use the `MNIST` dataset, which is a classic dataset in machine learning, to train our nearest neighbor classifier. It consists of 28x28 grayscale images of handwritten digits, along with corresponding labels (0 through 9) indicating the digit each image represents. The original MNIST training set contains 60,000 images, and the test set contains 10,000 images. However, for ease of computation on our 1.70 GHz Intel Core i7 laptop, which has limited computing power, we will prepare a subset of this original data and work with it.
 
 
 
 # Load in the modules and the dataset
 
 
-```{python}
+```{python} 
+#| eval: false
+# load in the required modules
 %matplotlib inline
-import numpy as np  #to load and manipulate data and to build NN classifier
-import matplotlib.pyplot as plt # to visualize datapoints
-import time # to compute classification time
-from sklearn.neighbors import KDTree # to build k-d tree algorithm
+import numpy as np  
+import matplotlib.pyplot as plt 
+import time
+import gzip, os
+from sklearn.neighbors import KDTree 
 
-
-## Load in the training set
-
-train_data = np.load('train_data.npy')
-train_labels = np.load('train_labels.npy')
-
-## Load in the testing set
-
-test_data = np.load('test_data.npy')
-test_labels = np.load('test_labels.npy')
 ```
 
-## Dimensions of the training and the test set 
+We first download a `MNIST` data file from Yann Le Cun's website. 
+Then, we define functions `load_mnist_images` and `load_mnist_labels` 
+to convert the binary format to the numpy ndarray that we can work with.
 
 
-```{python}
-## Print out their dimensions
+```{python} 
+#| eval: false
+# Reads the binary file and converts it into suitable numpy ndarray
+def load_mnist_images(filename):
+    with gzip.open(filename, 'rb') as f:
+        data = np.frombuffer(f.read(), np.uint8, offset=16)
+    data = data.reshape(-1,784)
+    data = data.astype(np.float32)
+    return data
+
+def load_mnist_labels(filename):
+    with gzip.open(filename, 'rb') as f:
+        data = np.frombuffer(f.read(), np.uint8, offset=8)
+    return data
+```
+
+
+```{python} 
+#| eval: false
+# Load in the training set
+original_train_data = load_mnist_images('train-images-idx3-ubyte.gz')
+original_train_labels = load_mnist_labels('train-labels-idx1-ubyte.gz')
+
+# Load in the testing set
+original_test_data = load_mnist_images('t10k-images-idx3-ubyte.gz')
+original_test_labels = load_mnist_labels('t10k-labels-idx1-ubyte.gz')
+```
+
+
+```{python} 
+#| eval: false
+# Print out the dimensions and no. of labels of the original dataset
+
+print("Training dataset dimensions: ", np.shape(original_train_data))
+print("Number of training labels: ", len(original_train_labels), end='\n\n')
+
+print("Testing dataset dimensions: ", np.shape(original_test_data))
+print("Number of testing labels: ", len(original_test_labels))
+```
+
+    Training dataset dimensions:  (60000, 784)
+    Number of training labels:  60000
+    
+    Testing dataset dimensions:  (10000, 784)
+    Number of testing labels:  10000
+    
+
+# Prepare and analyse dataset
+
+Now, let's prepare a dataset from the original dataset that contains 8000 samples for the training set 
+and 2000 samples for the test set, where samples are uniformly distributed across all labels (0 to 9) in both the sets.
+We define a function `balance_dataset` to carry out this task.
+
+
+
+```{python} 
+#| eval: false
+def balance_dataset(original_data, original_labels, samples_per_label):
+
+    balanced_data = []
+    balanced_labels = []
+
+    # Iterate over each class label (0 to 9)
+    for class_label in range(10):
+        # Find indices where the label equals the current class label
+        indices = np.where(original_labels == class_label)[0]
+
+        # Sample 'samples_per_class' indices uniformly from the current label
+        sampled_indices = np.random.choice(indices, size=samples_per_label, replace=False)
+
+        # Append the sampled data and labels to the balanced dataset
+        balanced_data.append(original_data[sampled_indices])
+        balanced_labels.append(original_labels[sampled_indices])
+
+    # Concatenate the lists of arrays into single arrays
+    balanced_data = np.concatenate(balanced_data, axis=0)
+    balanced_labels = np.concatenate(balanced_labels, axis=0)
+
+    # Shuffle the balanced dataset (optional step)
+    shuffle_indices = np.random.permutation(len(balanced_data))
+    balanced_data = balanced_data[shuffle_indices]
+    balanced_labels = balanced_labels[shuffle_indices]
+
+    
+    return balanced_data, balanced_labels
+
+```
+
+
+```{python} 
+#| eval: false
+# preparing the dataset
+
+train_data, train_labels = balance_dataset(original_train_data, original_train_labels, 800)
+
+test_data, test_labels = balance_dataset(original_test_data, original_test_labels, 200)
+```
+
+Let's examine the distribution of our dataset
+
+
+```{python} 
+#| eval: false
+# Compute the number of images of each digit in the training and test datasets
+
+train_digits, train_counts = np.unique(train_labels, return_counts=True)
+print("Training set distribution:")
+print(dict(zip(train_digits, train_counts)), end='\n\n')
+
+test_digits, test_counts = np.unique(test_labels, return_counts=True)
+print("Test set distribution:")
+print(dict(zip(test_digits, test_counts)))  
+```
+
+    Training set distribution:
+    {0: 800, 1: 800, 2: 800, 3: 800, 4: 800, 5: 800, 6: 800, 7: 800, 8: 800, 9: 800}
+    
+    Test set distribution:
+    {0: 200, 1: 200, 2: 200, 3: 200, 4: 200, 5: 200, 6: 200, 7: 200, 8: 200, 9: 200}
+    
+
+So in summary, we have prepared the following dataset:
+
+* A training set comprising 8000 images, 800 per label, and
+* A test set consisting of 2000 images, 200 per label
+
+Now, let's also look at the dimensions and number of labels of our new dataset
+
+
+```{python} 
+#| eval: false
+## Print out the dimensions and labels of the dataset we prepared
 
 print("Training dataset dimensions: ", np.shape(train_data))
 print("Number of training labels: ", len(train_labels), end='\n\n')
@@ -62,40 +173,104 @@ print("Testing dataset dimensions: ", np.shape(test_data))
 print("Number of testing labels: ", len(test_labels))
 ```
 
+    Training dataset dimensions:  (8000, 784)
+    Number of training labels:  8000
+    
+    Testing dataset dimensions:  (2000, 784)
+    Number of testing labels:  2000
+    
+
 
 Each data point, i.e., a handwritten digit image in the dataset, 
 is composed of 784 pixels and is stored as a vector with 784 coordinates/dimensions, 
 where each coordinate has a numeric value ranging from 0 to 255.
+Let's look at these numeric values by examining one of the images, say, the first image, in the dataset.
 
-Let us look at these numeric values by examining one of the images, say, the first image, in the dataset.
 
-
-```{python}
+```{python} 
+#| eval: false
 # print out the the first data point in training data
 
-train_data[0] 
-```
-
-## Compute the number of images of each digit in the dataset
-
-
-```{python}
-## Compute the number of images of each digit in the training ans test dataset
-
-
-train_digits, train_counts = np.unique(train_labels, return_counts=True)
-print("Training set distribution:")
-print(dict(zip(train_digits, train_counts)), end='\n\n')
-
-test_digits, test_counts = np.unique(test_labels, return_counts=True)
-print("Test set distribution:")
-print(dict(zip(test_digits, test_counts)))
-      
-      
+train_data[0]
 ```
 
 
-So in the training set, we have 750 images of digits 0-9 each, totaling 7500 images. In the test set, we have 100 images of digits 0-9 each, with a total of 1000 images.
+
+
+    array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0., 116., 245., 244.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,  48., 239., 254., 226.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0., 103., 254., 254.,  99.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,  17., 212., 254., 170.,
+             2.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,  60., 254., 254., 141.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 110., 254., 254.,
+           141.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0., 178., 254., 254.,  28.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  24., 221., 254.,
+           201.,  10.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,  42., 254., 254.,  85.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 126., 255.,
+           254.,  41.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0., 160., 254., 254.,  41.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  21., 240.,
+           255., 226.,  26.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,  77., 254., 254., 177.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1., 148.,
+           254., 224.,  31.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   6., 254., 254., 195.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  29.,
+           254., 254., 195.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0., 126., 254., 254., 110.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+           164., 254., 241.,  52.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0., 244., 254., 165.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0., 188., 254.,  95.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+             0.,   0.,   0.], dtype=float32)
+
+
 
 # Visualize the data
 
@@ -107,10 +282,9 @@ to display the image of the digit given as input.
 
 
 
-```{python}
-## Define a function that displays a digit given its vector representation
-
-
+```{python} 
+#| eval: false
+# Define a function that displays a digit given its vector representation
 def show_digit(x):
     
     plt.axis('off')
@@ -118,8 +292,7 @@ def show_digit(x):
     plt.show()
 
 
-## Define a function that takes an index of particular data set ("train" or "test") and displays that image.
-
+# Define a function that takes an index of particular data set ("train" or "test") and displays that image.
 def vis_image(index, dataset="train"):
     
     if(dataset=="train"): 
@@ -133,32 +306,58 @@ def vis_image(index, dataset="train"):
 
 ```
 
-## View the first data point in the training set and test set
+## View the first data point in the training and test sets
 
 
 Now that we have defined a function for visualizing the image, 
 let's see it in action by applying it to the first data points of the dataset.
 
 
-```{python}
-## View the first data point in the training set
+```{python} 
+#| eval: false
+# View the first data point in the training set
 
 vis_image(0, "train")
 
 ```
 
 
-```{python}
-## Now view the first data point in the test set
+    
+![](output_25_0.png)
+    
+
+
+    		    Label 1
+    
+
+
+```{python} 
+#| eval: false
+# Now view the first data point in the test set
 
 vis_image(0, "test")
 ```
+
+
+    
+![](output_26_0.png)
+    
+
+
+    		    Label 5
+    
 
 # Compute squared Euclidean distance
 
 
 To compute nearest neighbor in our dataset, we first need to be able to compute distances between data points 
 (i.e., images in this case), and the most common or default distance function is perhaps just Euclidean distance.
+
+If x is the vector representing an image and y is the corresponding label, then:
+
+* Data space: $x \in \mathbb{R}^{784}$, a 784-dimensional vector consisting of numeric values ranging from 0 to 255.
+* Label space: $y = \{0.....9\}$, representing the label of the image.
+
 
 Since we have 784-dimensional vectors to work with, the Euclidean distance between two 784-dimensional vectors, 
 say $x, z \in \mathbb{R}^{784}$, is:
@@ -177,32 +376,42 @@ $$\|x - z\|^2 = \sum_{i=1}^{784} (x_i - z_i)^2$$
 The following `squared_dist` function computes the squared Euclidean distance between two vectors.
 
 
-```{python}
-## Computes squared Euclidean distance between two vectors.
+```{python} 
+#| eval: false
+# Computes squared Euclidean distance between two vectors.
 
 def squared_dist(x,z):
     return np.sum(np.square(x-z))
-
-
 ```
 
-## Examples of computing squared Euclidean distance
+## Test the Euclidean distance function
 
 
-```{python}
+let's compute Euclidean distances of some random digits to see the `squared_dist` function in action before we use it in the NN classifier. 
+
+
+```{python} 
+#| eval: false
 
 print('Examples:\n')
 
-## Computing distances between digits in our training set.
+# Computing distances between random digits in our training set.
 
-print(f"Distance from digit {train_labels[4]} to digit {train_labels[5]} in our training set: {squared_dist(train_data[4],train_data[5])}")
+print(f"Distance from digit {train_labels[3]} to digit {train_labels[5]} in our training set: {squared_dist(train_data[4],train_data[5])}")
 
-print(f"Distance from digit {train_labels[4]} to digit {train_labels[1]} in our training set: {squared_dist(train_data[4],train_data[1])}")
+print(f"Distance from digit {train_labels[3]} to digit {train_labels[1]} in our training set: {squared_dist(train_data[4],train_data[1])}")
 
-print(f"Distance from digit {train_labels[4]} to digit {train_labels[7]} in our training set: {squared_dist(train_data[4],train_data[7])}")
+print(f"Distance from digit {train_labels[3]} to digit {train_labels[7]} in our training set: {squared_dist(train_data[4],train_data[7])}")
 ```
 
-# Build nearest neighbor classifier
+    Examples:
+    
+    Distance from digit 1 to digit 7 in our training set: 6720216.0
+    Distance from digit 1 to digit 2 in our training set: 12104963.0
+    Distance from digit 1 to digit 3 in our training set: 9038792.0
+    
+
+# Build nearest neighbor(NN) classifier
 
 Now that we have a distance function defined, we can turn to nearest neighbor classification.
 
@@ -216,8 +425,9 @@ The returned label is what the given image `x` could represent.
 
 
 
-```{python}
-## Takes a vector x and returns the index of its nearest neighbor in train_data
+```{python} 
+#| eval: false
+# Takes a vector x and returns the index of its nearest neighbor in train_data
 
 def find_NN(x):
     
@@ -229,7 +439,7 @@ def find_NN(x):
     return np.argmin(distances)
 
 
-## Takes a vector x and returns the class of its nearest neighbor in train_data
+# Takes a vector x and returns the class of its nearest neighbor in train_data
 
 def NN_classifier(x):
     
@@ -242,15 +452,16 @@ def NN_classifier(x):
 
 ```
 
-# Performance of the nearest neighbor classifier
+# Test the NN classifier
 
-Now, let's apply our nearest neighbor classifier to the full test dataset.<br>
-
-
+Let's apply our nearest neighbor classifier to the full test dataset.<br>
 
 
-```{python}
-## Predict on each test data point and time it!
+
+
+```{python} 
+#| eval: false
+# Predict on each test data point and time it!
 
 t_before = time.time()
 test_predictions = [NN_classifier(test_data[i]) for i in range(len(test_labels))]
@@ -260,36 +471,43 @@ t_after = time.time()
 
 ## Compute the classification time of NN
 
-Since the nearest neighbor classifier goes through the entire training set of 7500 images, searching for the nearest neighbor image for every single test image in the dataset of 1000 images, we should not expect testing to be very fast.
+Since the nearest neighbor classifier goes through the entire training set of 8000 images, searching for the nearest neighbor image for every single test image in the dataset of 2000 images, we should not expect testing to be very fast.
 
 
 
 
 
 
-```{python}
-## Compute the classification time of NN classifier
+```{python} 
+#| eval: false
+# Compute the classification time of NN classifier
 
 print(f"Classification time of NN classifier: {round(t_after - t_before, 2)} sec")
 
 ```
 
+    Classification time of NN classifier: 227.05 sec
+    
+
 ## Compute the error rate of NN
 
 
-```{python}
-## Compute the error rate 
+```{python} 
+#| eval: false
+# Compute the error rate 
 
 err_positions = np.not_equal(test_predictions, test_labels)
 error = float(np.sum(err_positions))/len(test_labels)
 
-print(f"Error rate of nearest neighbor classifier: {error * 100}%")
+print(f"Error rate of nearest neighbor classifier: {round(error * 100, 2)}%")
 
 ```
 
-The error rate of the NN classifier is 4.6%. 
-This means that out of the 1000 points, NN misclassifies 46 of them. 
-That's not too bad for such a simple method.
+    Error rate of nearest neighbor classifier: 5.45%
+    
+
+The error rate of the NN classifier is 5.45%. 
+This means that out of the 2000 points, NN misclassifies around 109 of them, which is not too bad for such a simple method.
 
 # Improve nearest neighbors
 
@@ -297,7 +515,6 @@ NN classifier can be improved in two aspects:
 
 * Decreasing the error rate
 * Decreasing the classification time
-
 
         Decreasing the error rate
 
@@ -348,8 +565,9 @@ This algorithm is based on the triangle inequality, utilizing the fact that if p
 This way, the computational cost of a nearest neighbors search can be reduced to $O(dNlog(N))$ or better.
 
 
-```{python}
-## Build nearest neighbor structure on training data
+```{python} 
+#| eval: false
+# Build nearest neighbor structure on training data
 
 t_before = time.time()
 kd_tree = KDTree(train_data)
@@ -378,14 +596,21 @@ print(f"Overall classification time of k-d tree algorithm: {round(t_training+t_t
 print("Does k-d tree produce same predictions as NN classifier? ", np.array_equal(test_predictions, kd_tree_predictions))
 ```
 
+    Time to build data structure: 0.99 sec
+    Time to classify test set: 20.35 sec
+    
+    Overall classification time of k-d tree algorithm: 21.34 sec
+    Does k-d tree produce same predictions as NN classifier?  True
+    
+
 We can see that the baseline nearest neighbor model and the k-d tree algorithm produce the same predictions, 
-but the key difference is that the k-d tree is significantly faster than the former.
+but the key difference is that the k-d tree is significantly faster than the former. 
+It just took 21.34 sec to classify the whole test set.
 
 
 # Conclusion
 
 We have found that our nearest neighbor (NN) classifier has delivered reasonably good performance, 
 despite employing a brute-force search approach and using a basic distance measure such as Euclidean distance.
-
 We have also seen how the k-d tree algorithm can be used to speed up the search process, thereby making it feasible for the nearest neighbor classifier to be applied to larger datasets.
 
