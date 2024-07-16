@@ -89,13 +89,11 @@ website:
             - projects/NimGame/NimGame.qmd
             
 
-
-
 format:
   html:
-    theme: 
-      - cosmo
-      - styles.scss
+#    theme: 
+#      - cosmo
+#      - styles.scss
     fontsize: 16px
 #    monofont: Source Sans Pro, sans-serif
 
@@ -111,7 +109,9 @@ format:
     code-copy: false
     code-fold: show
     code-overflow: wrap
-
+    code-block-bg: true
+    code-block-border-left: true
+    highlight-style: tango
       
     
     

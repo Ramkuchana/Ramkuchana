@@ -117,7 +117,7 @@ First, let's query the `collections` table.
 
 
 ```{sql, connection = con}
-select * from "collections";
+SELECT * FROM "collections";
 
 ```
 
@@ -135,7 +135,7 @@ We can verify that this worked by querying the `collections` table.
 
 
 ```{sql, connection = con}
-select * from "collections";
+SELECT * FROM "collections";
 
 ```
 
@@ -154,7 +154,7 @@ WHERE "title" IN ('Farmers working at dawn', 'Tile Lunette');
 We can verify that this worked by querying the `collections` table to check for soft deletion.
 
 ```{sql, connection = con}
-select * from "collections";
+SELECT * FROM "collections";
 
 ```
 
