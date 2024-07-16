@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "projects/NimGame/NimGame.html",
       "projects/MNIST/mnist.html",
+      "projects/NimGame/NimGame.html",
       "projects/ParseTrees/ParsetreesNnounphrases.html",
       "projects/SQLPackages/packages.html",
       "projects/SQLMuseum/mfa.html",

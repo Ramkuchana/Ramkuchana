@@ -38,14 +38,12 @@ listing:
     type: grid
 #    categories: unnumbered
     contents:
-      
-      - projects/NimGame/nimgame.yaml
       - projects/MNIST/mnist.yaml
+      - projects/NimGame/nimgame.yaml
       - projects/ParseTrees/parsetrees.yaml
       - projects/SQLPackages/sqlpackages.yaml
       - projects/SQLMuseum/sqlmfa.yaml
       - projects/Salesdashboard/salesdashboard.yaml
-    
     fields: [title, image, categories]
     sort: false
 ---
@@ -53,7 +51,7 @@ listing:
 ::: {#ppc}
 Hi, I'm Ram!
 
-I have newly developed passion for Data Science and Coding. Here, I post my projects whenever i have done something new and got time.
+Here, I post my projects whenever i have done something new and got time.
 :::
 
 ## Projects
