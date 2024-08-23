@@ -1,5 +1,5 @@
 ---
-title: 1. Generating parse trees and extracting noun phrases
+title: Generating parse trees and extracting noun phrases
 
 ---
 In Natural Language Processing (NLP), parsing refers to the process of analyzing a sentence to identify its grammatical structure. This is useful for a number of reasons, such as understanding sentence structure, resolving ambiguities in sentences, and better extraction of information from sentences.

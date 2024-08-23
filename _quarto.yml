@@ -72,10 +72,13 @@ website:
       contents:
         - section: "ML Projects"
           contents:
+            - projects/Bert/bertmodel.qmd
+            - projects/BnMclass/binaryNmulti.qmd
+            - projects/FashionMNIST/fashionMNIST.qmd
             - projects/MNIST/mnist.qmd
             - projects/NimGame/NimGame.qmd
-        - section: "NLP Projects"
-          contents:
+#        - section: "NLP Projects"
+#          contents:
             - projects/ParseTrees/ParsetreesNnounphrases.qmd
         - section: "SQL Projects"
           contents:

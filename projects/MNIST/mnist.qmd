@@ -1,15 +1,19 @@
 ---
-title: 1. Nearest neighbor classifier for handwritten digit recognition
+title: Nearest neighbor classifier for handwritten digit recognition
 jupyter: python3
 ---
 
 <br>
-In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Specifically, we will explore a simple strategy for this problem known as the nearest neighbor(NN) classifier.
-Then, we will look at how to improve the NN classifier.
+In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Convolutional Neural Networks (CNNs) are usually preferred for such tasks because they are specifically designed to handle the spatial and hierarchical nature of image data, making them highly effective.
+
+However, in this project, let's explore a simple strategy to build a classifier based on nearest neighbors (NN). We will then examine methods to improve classification time by reducing the nearest neighbor search time.
+
 
 # The MNIST dataset
 
-We will use the `MNIST` dataset, which is a classic dataset in machine learning, to train our nearest neighbor classifier. It consists of 28x28 grayscale images of handwritten digits, along with corresponding labels (0 through 9) indicating the digit each image represents. The original MNIST training set contains 60,000 images, and the test set contains 10,000 images. However, for ease of computation on our 1.70 GHz Intel Core i7 laptop, which has limited computing power, we will prepare a subset of this original data and work with it.
+We will use the `MNIST` dataset, which is a classic dataset in machine learning, to train our nearest neighbor classifier. It consists of 28x28 grayscale images of handwritten digits, along with corresponding labels (0 through 9) indicating the digit each image represents.
+
+The original MNIST training set contains 60,000 images, and the test set contains 10,000 images. However, for ease of computation on our 1.70 GHz Intel Core i7 (16GB RAM) laptop, which has limited computing power, we will prepare a subset of this original data and work with it.
 
 
 
@@ -80,7 +84,7 @@ print("Number of testing labels: ", len(original_test_labels))
     Number of testing labels:  10000
     
 
-# Prepare and analyse dataset
+# Prepare and analyse balanced dataset
 
 Now, let's prepare a dataset from the original dataset that contains 8000 samples for the training set 
 and 2000 samples for the test set, where samples are uniformly distributed across all labels (0 to 9) in both the sets.
@@ -124,7 +128,7 @@ def balance_dataset(original_data, original_labels, samples_per_label):
 
 ```{python} 
 #| eval: false
-# preparing the dataset
+# preparing the balanced dataset
 
 train_data, train_labels = balance_dataset(original_train_data, original_train_labels, 800)
 

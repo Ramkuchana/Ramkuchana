@@ -1,5 +1,5 @@
 ---
-title: 2. Training an AI to play a game using reinforcement learning
+title: Training an AI to play a game using reinforcement learning
 
 ---
 

@@ -1,0 +1,5 @@
+---
+title: Building a model to identify the type of clothing in the image
+---
+
+This will be published by 27.08.2024

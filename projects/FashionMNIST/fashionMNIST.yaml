@@ -1,0 +1,4 @@
+- title: Building a model to identify the type of clothing in the image
+  path: projects/FashionMNIST/fashionMNIST.qmd
+#  image: projects/ParseTrees/parsetree.png
+  categories: [PyTorch, SCIKIT-LEARN, MATPLOTLIB]

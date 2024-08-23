@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Sales dashboard using Tableau</title>
+<title>Using a pre-trained BERT model for text prediction and analysing its self-attention scores</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../projects/SQLMuseum/mfa.html" rel="prev">
+<link href="../../projects/BnMclass/binaryNmulti.html" rel="next">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Salesdashboard/salesdashboard.html">Tableau Projects</a></li><li class="breadcrumb-item"><a href="../../projects/Salesdashboard/salesdashboard.html">Sales dashboard using Tableau</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">Using a pre-trained BERT model for text prediction and analysing its self-attention scores</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -123,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../projects/Bert/bertmodel.html" class="sidebar-item-text sidebar-link">
+  <a href="../../projects/Bert/bertmodel.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Using a pre-trained BERT model for text prediction and analysing its self-attention scores</span></a>
   </div>
 </li>
@@ -193,7 +193,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../projects/Salesdashboard/salesdashboard.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../projects/Salesdashboard/salesdashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Sales dashboard using Tableau</span></a>
   </div>
 </li>
@@ -205,22 +205,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#dashboard-requirements" id="toc-dashboard-requirements" class="nav-link active" data-scroll-target="#dashboard-requirements"><span class="header-section-number">1</span> Dashboard Requirements</a></li>
-  <li><a href="#design-interactivity-requirements" id="toc-design-interactivity-requirements" class="nav-link" data-scroll-target="#design-interactivity-requirements"><span class="header-section-number">2</span> Design &amp; Interactivity Requirements</a></li>
-  <li><a href="#sample-gif-of-the-dashboard" id="toc-sample-gif-of-the-dashboard" class="nav-link" data-scroll-target="#sample-gif-of-the-dashboard"><span class="header-section-number">3</span> Sample GIF of the Dashboard</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Sales dashboard using Tableau</h1>
+<h1 class="title">Using a pre-trained BERT model for text prediction and analysing its self-attention scores</h1>
 </div>
 
 
@@ -235,46 +227,9 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>In this project, we will build a dashboard using Tableau to help stakeholders analyze sales performance for the years 2020-2023. The dashboard is designed based on the following requirements, and the complete dashboard can be accessed at the following link:</p>
-<p><a href="https://public.tableau.com/views/SalesDashboard_17209525785640/SalesDashboard?:language=en-US&amp;:sid=&amp;:redirect=auth&amp;:display_count=n&amp;:origin=viz_share_link">Click here to view the full dashboard</a></p>
-<section id="dashboard-requirements" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Dashboard Requirements</h1>
-<p><strong>Sales metrics and trends:</strong></p>
-<ul>
-<li><p>Display a summary of sales metrics such as total sales, total profits, and total quantity, comparing the current year with the previous year with KPI symbol.</p></li>
-<li><p>For each sales metric, present the data on a monthly basis, comparing the current year with the previous year. Highlight the highest and lowest months.</p></li>
-</ul>
-<p><strong>Product subcategory comparison:</strong></p>
-<ul>
-<li><p>Compare sales across different product subcategories for the current year and the previous year.</p></li>
-<li><p>Compare sales and profits for the current year.</p></li>
-</ul>
-<p><strong>Weekly trends for sales &amp; profit:</strong></p>
-<ul>
-<li><p>Present weekly sales and profit data for the current year.</p></li>
-<li><p>Display the average weekly values for sales and profit data.</p></li>
-<li><p>Highlight weeks that are above and below the average values to draw attention.</p></li>
-</ul>
-</section>
-<section id="design-interactivity-requirements" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Design &amp; Interactivity Requirements</h1>
-<ul>
-<li><p>Make the graphs interactive, enabling the users to filter the data using graphs.</p></li>
-<li><p>The dashboard should allow users to check historical data by offering them the flexibility to select any desired year.</p></li>
-<li><p>Allow users to filter the data by product information like category and subcategory, as well as by location information such as region, state, and city.</p></li>
-</ul>
-</section>
-<section id="sample-gif-of-the-dashboard" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Sample GIF of the Dashboard</h1>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="DashboardGIF.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">GIF of the Dashboard</figcaption>
-</figure>
-</div>
+<p>This will be published by 27.08.2024</p>
 
 
-</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -460,11 +415,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../projects/SQLMuseum/mfa.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Soft deletions, views, and triggers in the context of a museum’s database</span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../../projects/BnMclass/binaryNmulti.html" class="pagination-link">
+        <span class="nav-page-text">Developing neural network models for binary and multi-class classification problems</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

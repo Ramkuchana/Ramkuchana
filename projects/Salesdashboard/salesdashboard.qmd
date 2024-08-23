@@ -1,5 +1,5 @@
 ---
-title: 1. Sales dashboard using Tableau
+title: Sales dashboard using Tableau
 
 ---
 

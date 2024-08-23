@@ -1,5 +1,5 @@
 ---
-title: 2. Soft deletions, views, and triggers in the context of a museum’s database
+title: Soft deletions, views, and triggers in the context of a museum’s database
 
 ---
 

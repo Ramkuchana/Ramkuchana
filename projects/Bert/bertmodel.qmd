@@ -1,0 +1,5 @@
+---
+title: Using  a pre-trained BERT model for text prediction and analysing its self-attention scores
+---
+
+This will be published by 27.08.2024

@@ -1,0 +1,4 @@
+- title: Using  a pre-trained BERT model for text prediction and analysing its self-attention scores
+  path: projects/Bert/bertmodel.qmd
+#  image: projects/ParseTrees/parsetree.png
+  categories: [PYTORCH, PIL, TRANSFORMERS]

@@ -38,6 +38,9 @@ listing:
     type: grid
 #    categories: unnumbered
     contents:
+      - projects/Bert/bertmodel.qmd
+      - projects/BnMclass/binaryNmulti.qmd
+      - projects/FashionMNIST/fashionMNIST.qmd
       - projects/MNIST/mnist.yaml
       - projects/NimGame/nimgame.yaml
       - projects/ParseTrees/parsetrees.yaml
