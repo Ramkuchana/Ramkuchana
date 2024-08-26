@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -84,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../../projects/MNIST/mnist.html" rel="" target="" aria-current="page">
+    <a class="nav-link active" href="../../projects/Bert/bertmodel.html" rel="" target="" aria-current="page">
  <span class="menu-text">Projects</span></a>
   </li>  
 </ul>
@@ -130,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../projects/BnMclass/binaryNmulti.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Developing neural network models for binary and multi-class classification problems</span></a>
+ <span class="menu-text">Developing neural network models for classification problems using PyTorch</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -205,7 +239,32 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#code" id="toc-code" class="nav-link active" data-scroll-target="#code"><span class="header-section-number">1</span> Code</a>
+  <ul class="collapse">
+  <li><a href="#import-the-required-modules" id="toc-import-the-required-modules" class="nav-link" data-scroll-target="#import-the-required-modules"><span class="header-section-number">1.1</span> Import the required modules</a></li>
+  <li><a href="#setup-constants" id="toc-setup-constants" class="nav-link" data-scroll-target="#setup-constants"><span class="header-section-number">1.2</span> Setup constants</a></li>
+  <li><a href="#the-main-function" id="toc-the-main-function" class="nav-link" data-scroll-target="#the-main-function"><span class="header-section-number">1.3</span> The <code>main()</code> function</a></li>
+  <li><a href="#helper-functions" id="toc-helper-functions" class="nav-link" data-scroll-target="#helper-functions"><span class="header-section-number">1.4</span> Helper functions</a></li>
+  </ul></li>
+  <li><a href="#predicting-missing-word" id="toc-predicting-missing-word" class="nav-link" data-scroll-target="#predicting-missing-word"><span class="header-section-number">2</span> Predicting missing word</a></li>
+  <li><a href="#analysing-the-attention-diagrams" id="toc-analysing-the-attention-diagrams" class="nav-link" data-scroll-target="#analysing-the-attention-diagrams"><span class="header-section-number">3</span> Analysing the attention diagrams</a>
+  <ul class="collapse">
+  <li><a href="#layer-1-head-5" id="toc-layer-1-head-5" class="nav-link" data-scroll-target="#layer-1-head-5"><span class="header-section-number">3.1</span> Layer 1, Head 5</a></li>
+  <li><a href="#layer-5-head-1" id="toc-layer-5-head-1" class="nav-link" data-scroll-target="#layer-5-head-1"><span class="header-section-number">3.2</span> Layer 5, Head 1</a></li>
+  <li><a href="#layer-12-head-8" id="toc-layer-12-head-8" class="nav-link" data-scroll-target="#layer-12-head-8"><span class="header-section-number">3.3</span> Layer 12, Head 8</a></li>
+  <li><a href="#diagonal-patterns" id="toc-diagonal-patterns" class="nav-link" data-scroll-target="#diagonal-patterns"><span class="header-section-number">3.4</span> Diagonal patterns</a>
+  <ul class="collapse">
+  <li><a href="#layer-3-head-1" id="toc-layer-3-head-1" class="nav-link" data-scroll-target="#layer-3-head-1"><span class="header-section-number">3.4.1</span> Layer 3, Head 1</a></li>
+  <li><a href="#layer-3-head-7" id="toc-layer-3-head-7" class="nav-link" data-scroll-target="#layer-3-head-7"><span class="header-section-number">3.4.2</span> Layer 3, Head 7</a></li>
+  <li><a href="#layer-4-head-6" id="toc-layer-4-head-6" class="nav-link" data-scroll-target="#layer-4-head-6"><span class="header-section-number">3.4.3</span> Layer 4, Head 6</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -227,9 +286,303 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>This will be published by 27.08.2024</p>
+<p>BERT (Bidirectional Encoder Representations from Transformers) is a pre-trained transformer-based model designed for various NLP tasks, including masked language modeling. In masked language modeling, BERT predicts missing or masked words within a text sequence by leveraging the surrounding context. The transformer architecture it uses consists of multiple layers of self-attention mechanisms and feedforward neural networks, which enable it to understand and model complex language patterns. The base BERT model contains 12 transformer layers (also known as transformer blocks), each with 12 self-attention heads, totaling 144 self-attention heads across the model.</p>
+<p>In this project, we will:</p>
+<ol type="1">
+<li><p>Use the pre-trained BERT base model to predict masked words in a text sequence and generate diagrams that visualize attention scores.</p></li>
+<li><p>Analyze these diagrams to understand what BERT’s attention heads might be focusing on as it processes natural language.</p></li>
+</ol>
+<section id="code" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Code</h1>
+<section id="import-the-required-modules" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="import-the-required-modules"><span class="header-section-number">1.1</span> Import the required modules</h2>
+<div class="cell" data-execution_count="1">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the required modules</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image, ImageDraw, ImageFont</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> BertTokenizer, BertForMaskedLM</span></code></pre></div>
+</details>
+</div>
+<p>We will utilize the <code>transformers</code> library from Hugging Face, which provides pre-trained models and tokenizers for a variety of NLP tasks. Specifically, <code>BertTokenizer</code> is used to convert text into tokens that the BERT model can process, while <code>BertForMaskedLM</code> is the version of BERT specialized for masked language modeling.</p>
+</section>
+<section id="setup-constants" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="setup-constants"><span class="header-section-number">1.2</span> Setup constants</h2>
+<div class="cell" data-execution_count="2">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-trained masked language model</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>MODEL <span class="op">=</span> <span class="st">"bert-base-uncased"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of predictions to generate</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants for generating attention diagrams</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>FONT_PATH <span class="op">=</span> <span class="st">"OpenSans-Regular.ttf"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>GRID_SIZE <span class="op">=</span> <span class="dv">40</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>PIXELS_PER_WORD <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the font</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    FONT <span class="op">=</span> ImageFont.truetype(FONT_PATH, <span class="dv">28</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">IOError</span>:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Font not found at </span><span class="sc">{</span>FONT_PATH<span class="sc">}</span><span class="ss">. Loading default font"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    FONT <span class="op">=</span> ImageFont.load_default()</span></code></pre></div>
+</details>
+</div>
+<p>We are using the <code>bert-base-uncased</code> version of BERT, where all text is converted to lowercase before tokenization, meaning no distinction is made between uppercase and lowercase letters. The constant <code>K</code> represents the number of top predictions the model should return for a masked word. This involves ranking potential words that could replace the <code>[MASK]</code> token and selecting the top <code>K</code> candidates.</p>
+</section>
+<section id="the-main-function" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="the-main-function"><span class="header-section-number">1.3</span> The <code>main()</code> function</h2>
+<div class="cell" data-execution_count="3">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(text, viz_attentions <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tokenize input</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    tokenizer <span class="op">=</span> BertTokenizer.from_pretrained(MODEL)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> tokenizer(text, return_tensors<span class="op">=</span><span class="st">"pt"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    mask_token_index <span class="op">=</span> get_mask_token_index(tokenizer.mask_token_id, inputs)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mask_token_index <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        sys.exit(<span class="ss">f"Input must include mask token </span><span class="sc">{</span>tokenizer<span class="sc">.</span>mask_token<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use model to process input</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> BertForMaskedLM.from_pretrained(MODEL)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()  <span class="co"># Set the model to evaluation mode</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():  <span class="co"># Disable gradient computation</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> model(<span class="op">**</span>inputs, output_attentions<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate predictions</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    mask_token_logits <span class="op">=</span> result.logits[<span class="dv">0</span>, mask_token_index]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    top_tokens <span class="op">=</span> torch.topk(mask_token_logits, K).indices</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> token <span class="kw">in</span> top_tokens:</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(text.replace(tokenizer.mask_token, tokenizer.decode([token])))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Visualize attentions</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> viz_attentions:</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        visualize_attentions(tokenizer.convert_ids_to_tokens(inputs[<span class="st">'input_ids'</span>][<span class="dv">0</span>]), result.attentions)</span></code></pre></div>
+</details>
+</div>
+<p>Now, let’s briefly go over some important parts of the code and explain the underlying concepts:</p>
+<p><strong>The <code>main()</code> function:</strong></p>
+<p>This is where the script’s logic begins. The function must be called with a sentence containing a masked token (<code>[MASK]</code>). The masked token is crucial because BERT’s masked language modeling task involves predicting the masked word using the surrounding context.</p>
+<p><strong>Tokenization:</strong></p>
+<p>The input text is tokenized using the BERT tokenizer. Tokenization breaks the text into tokens (words or subwords) that the model can process. BERT uses WordPiece tokenization, which allows it to handle words and subwords. The argument <code>return_tensors="pt"</code> ensures that the tokenized output is returned as PyTorch tensors, which are the primary data structures used by models in PyTorch. The <code>get_mask_token_index()</code> function finds the index of the <code>[MASK]</code> token in the tokenized input. This index is critical because the model predicts the missing word at this position.</p>
+<p><strong>Model Inference:</strong></p>
+<p>The BERT model processes the tokenized inputs. It returns several outputs, including logits (which contain predictions for the masked token) and attentions (which contain the self-attention scores from each layer of the model). The <code>output_attentions=True</code> argument ensures that attention scores are included in the output.</p>
+<p><strong>Generating Predictions:</strong></p>
+<p>The script extracts the logits corresponding to the masked token. Logits are raw, unnormalized scores output by the model, representing its confidence in each possible token being the correct replacement for the <code>[MASK]</code> position. <code>torch.topk</code> is then used to select the top <code>K</code> highest-scoring tokens from the logits. These tokens are the model’s most likely candidates to replace the <code>[MASK]</code>. The top predicted tokens are decoded back into words or subwords using <code>tokenizer.decode()</code>. The original text is then printed with the <code>[MASK]</code> token replaced by each predicted token, showing what the model considers the most likely words in the given context.</p>
+<p><strong>Visualizing Attention Scores:</strong></p>
+<p>The token IDs are converted back to their corresponding tokens (words or subwords) using <code>tokenizer.convert_ids_to_tokens()</code>. This is necessary because attention scores are tied to specific tokens, which need to be displayed in the visualization. The <code>visualize_attentions()</code> function is called to generate diagrams that represent the attention scores across different layers and heads in the BERT model.</p>
+</section>
+<section id="helper-functions" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="helper-functions"><span class="header-section-number">1.4</span> Helper functions</h2>
+<p>Now, let’s go over the helper functions that are used in the <code>main()</code> function.</p>
+<div class="cell" data-execution_count="4">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_mask_token_index(mask_token_id, inputs):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Return the index of the token with the specified `mask_token_id`, or</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    `None` if not present in the `inputs`.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, token <span class="kw">in</span> <span class="bu">enumerate</span>(inputs[<span class="st">'input_ids'</span>][<span class="dv">0</span>]):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> token <span class="op">==</span> mask_token_id:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> i</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code></pre></div>
+</details>
+</div>
+<p>The <code>get_mask_token_index()</code> function returns the index of the masked token in the input sequence. If the token is not found, it returns None.</p>
+<div class="cell" data-execution_count="5">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_color_for_attention_score(attention_score):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Return a tuple of three integers representing a shade of gray for the</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    given `attention_score`. Each value should be in the range [0, 255].</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="bu">round</span>(attention_score <span class="op">*</span> <span class="dv">255</span>), <span class="bu">round</span>(attention_score <span class="op">*</span> <span class="dv">255</span>), <span class="bu">round</span>(attention_score <span class="op">*</span> <span class="dv">255</span>))</span></code></pre></div>
+</details>
+</div>
+<p>The <code>get_color_for_attention_score()</code> function converts an attention score (ranging from 0 to 1) into a grayscale color tuple, where higher scores correspond to lighter shades.</p>
+<div class="cell" data-execution_count="6">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_diagram(layer_number, head_number, tokens, attention_weights):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Generate a diagram representing the self-attention scores for a single</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    attention head. The diagram shows one row and column for each of the</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    `tokens`, and cells are shaded based on `attention_weights`, with lighter</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    cells corresponding to higher attention scores.</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    The diagram is saved with a filename that includes both the `layer_number`</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">    and `head_number`.</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create new image</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    image_size <span class="op">=</span> GRID_SIZE <span class="op">*</span> <span class="bu">len</span>(tokens) <span class="op">+</span> PIXELS_PER_WORD</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> Image.new(<span class="st">"RGBA"</span>, (image_size, image_size), <span class="st">"black"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    draw <span class="op">=</span> ImageDraw.Draw(img)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Draw each token onto the image</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, token <span class="kw">in</span> <span class="bu">enumerate</span>(tokens):</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Draw token columns</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        token_image <span class="op">=</span> Image.new(<span class="st">"RGBA"</span>, (image_size, image_size), (<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        token_draw <span class="op">=</span> ImageDraw.Draw(token_image)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        token_draw.text(</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>            (image_size <span class="op">-</span> PIXELS_PER_WORD, PIXELS_PER_WORD <span class="op">+</span> i <span class="op">*</span> GRID_SIZE),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>            token,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>            fill<span class="op">=</span><span class="st">"white"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            font<span class="op">=</span>FONT</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        token_image <span class="op">=</span> token_image.rotate(<span class="dv">90</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        img.paste(token_image, mask<span class="op">=</span>token_image)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Draw token rows</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        _, _, width, _ <span class="op">=</span> draw.textbbox((<span class="dv">0</span>, <span class="dv">0</span>), token, font<span class="op">=</span>FONT)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        draw.text(</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>            (PIXELS_PER_WORD <span class="op">-</span> width, PIXELS_PER_WORD <span class="op">+</span> i <span class="op">*</span> GRID_SIZE),</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>            token,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>            fill<span class="op">=</span><span class="st">"white"</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>            font<span class="op">=</span>FONT</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Draw each word</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(tokens)):</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> PIXELS_PER_WORD <span class="op">+</span> i <span class="op">*</span> GRID_SIZE</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(tokens)):</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> PIXELS_PER_WORD <span class="op">+</span> j <span class="op">*</span> GRID_SIZE</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>            color <span class="op">=</span> get_color_for_attention_score(attention_weights[i][j].item())</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>            draw.rectangle((x, y, x <span class="op">+</span> GRID_SIZE, y <span class="op">+</span> GRID_SIZE), fill<span class="op">=</span>color)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save image in Attention images folder</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    Attention_folder_path <span class="op">=</span> os.path.join(os.getcwd(), <span class="st">'Attention images'</span>)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.exists(Attention_folder_path):</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>        os.makedirs(Attention_folder_path)</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    img.save(<span class="ss">f"</span><span class="sc">{</span>Attention_folder_path<span class="sc">}</span><span class="ss">/Attention_Layer</span><span class="sc">{</span>layer_number<span class="sc">}</span><span class="ss">_Head</span><span class="sc">{</span>head_number<span class="sc">}</span><span class="ss">.png"</span>)</span></code></pre></div>
+</details>
+</div>
+<p>The <code>generate_diagram()</code> function generates an image visualizing the self-attention scores for a single attention head. It creates a grid where each cell is shaded based on the attention score between two tokens. The diagram is saved as an image file in the “Attention images” folder.</p>
+<div class="cell" data-execution_count="7">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> visualize_attentions(tokens, attentions):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Produce a graphical representation of self-attention scores.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">    For each attention layer, one diagram should be generated for each</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">    attention head in the layer. Each diagram should include the list of</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">    `tokens` in the sentence. The filename for each diagram should</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">    include both the layer number (starting count from 1) and head number</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">    (starting count from 1).</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># BERT's attentions are stored per-layer, per-head, and across the token sequence</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, layer <span class="kw">in</span> <span class="bu">enumerate</span>(attentions):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># attentions are: batch_size x num_heads x seq_length x seq_length</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k, head_attention <span class="kw">in</span> <span class="bu">enumerate</span>(layer[<span class="dv">0</span>]):</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            layer_number <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>            head_number <span class="op">=</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            generate_diagram(</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                layer_number,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                head_number,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                tokens,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                head_attention</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            )</span></code></pre></div>
+</details>
+</div>
+<p>The <code>visualize_attentions()</code> function orchestrates the generation of attention diagrams for all layers and heads of the BERT model. It iterates over the attention layers and heads, calling <code>generate_diagram()</code> to create and save an attention diagram for each head in each layer.</p>
+</section>
+</section>
+<section id="predicting-missing-word" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Predicting missing word</h1>
+<p>Now that we have our code ready, let’s run it with the following sentence to see what the model predicts.</p>
+<p><strong>Example sentence:</strong> “He went to the supermarket to get some [MASK].”</p>
+<div class="cell" data-execution_count="8">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>main(<span class="st">"He went to the supermarket to get some [MASK]."</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>He went to the supermarket to get some food.
+He went to the supermarket to get some lunch.
+He went to the supermarket to get some groceries.</code></pre>
+<p>So, ‘food’, ‘lunch’ and ‘groceries’ are the top 3 words (as K=3) that the model predicts as the most likely replacements for the <code>[MASK]</code> token in the given sentence. Now, let’s analyse the attention diagrams that model has generated for the sentence.</p>
+</section>
+<section id="analysing-the-attention-diagrams" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Analysing the attention diagrams</h1>
+<p>After running the model, we obtain attention diagrams for all 144 attention heads across the 12 layers (one diagram per attention head). These diagrams display tokens (words/subwords) in both rows and columns, forming a grid where each cell represents the attention score between two tokens. The shading in the diagrams indicates the level of attention one token pays to another: lighter cells represent higher attention scores (indicating stronger focus), while darker cells represent lower attention scores. These diagrams illustrate how BERT progressively builds its understanding of the sentence—from basic syntactic parsing to deeper semantic understanding—ultimately aiming to predict the masked token by considering the entire context of the sentence.</p>
+<p>When analyzing the attention diagrams, it’s important to recognize that attention heads don’t always align with our expectations of how words relate to each other. They may not correspond to a human-interpretable relationship at all. However, by examining the patterns, we can make educated guesses about what these heads might be focusing on. We should look for heads that frequently display a clear, logical focus consistent with how humans would understand the sentence.</p>
+<section id="layer-1-head-5" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="layer-1-head-5"><span class="header-section-number">3.1</span> Layer 1, Head 5</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer1_Head5.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer1 Head5</figcaption>
+</figure>
+</div>
+<p>In this diagram, we can see that the word ‘he’ is paying attention to the word ‘went’, which might indicate that this attention head is exploring the relationship between the subject and the verb.</p>
+</section>
+<section id="layer-5-head-1" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="layer-5-head-1"><span class="header-section-number">3.2</span> Layer 5, Head 1</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer5_Head1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer5 Head1</figcaption>
+</figure>
+</div>
+<p>Here we can see that the words ‘went’, ‘get’, and ‘some’ are attending to the word ‘supermarket’, which might indicate that the model is trying to understand the context of where the action is taking place, which is crucial for predicting what the person is going to get.</p>
+</section>
+<section id="layer-12-head-8" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="layer-12-head-8"><span class="header-section-number">3.3</span> Layer 12, Head 8</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer12_Head8.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer12 Head8</figcaption>
+</figure>
+</div>
+<p>In this case, the <code>[MASK]</code> token is attending to the words ‘supermarket,’ ‘get,’ and ‘some’, which might indicate that the model is trying to determine what the missing word should be based on the context of these words.</p>
+</section>
+<section id="diagonal-patterns" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="diagonal-patterns"><span class="header-section-number">3.4</span> Diagonal patterns</h2>
+<p>The following heads have show strong attention along the diagonal which indicate that they are focusing on local context and syntactic relationships, ensuring that each word’s immediate context is well-understood.</p>
+<section id="layer-3-head-1" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="layer-3-head-1"><span class="header-section-number">3.4.1</span> Layer 3, Head 1</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer3_Head1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer3 Head1</figcaption>
+</figure>
+</div>
+<p>Here, we can see that each word is paying attention to the word that immediately follows it.</p>
+</section>
+<section id="layer-3-head-7" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="layer-3-head-7"><span class="header-section-number">3.4.2</span> Layer 3, Head 7</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer3_Head7.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer3 Head7</figcaption>
+</figure>
+</div>
+<p>In this case, each word is focusing on itself.</p>
+</section>
+<section id="layer-4-head-6" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="layer-4-head-6"><span class="header-section-number">3.4.3</span> Layer 4, Head 6</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Attention_Layer4_Head6.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Attention Layer4 Head6</figcaption>
+</figure>
+</div>
+<p>Here, we can see that each word is attending to the word that precedes it.</p>
 
 
+</section>
+</section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -418,7 +771,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../projects/BnMclass/binaryNmulti.html" class="pagination-link">
-        <span class="nav-page-text">Developing neural network models for binary and multi-class classification problems</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Developing neural network models for classification problems using PyTorch</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

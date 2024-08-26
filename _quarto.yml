@@ -36,7 +36,7 @@ website:
     left:
    
       - text: "Projects"
-        file: projects/MNIST/mnist.qmd
+        file: projects/Bert/bertmodel.qmd
 
 
         

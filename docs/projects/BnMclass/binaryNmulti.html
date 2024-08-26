@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Developing neural network models for binary and multi-class classification problems</title>
+<title>Developing neural network models for classification problems using PyTorch</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -85,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../../projects/MNIST/mnist.html" rel="" target="" aria-current="page">
+    <a class="nav-link active" href="../../projects/Bert/bertmodel.html" rel="" target="" aria-current="page">
  <span class="menu-text">Projects</span></a>
   </li>  
 </ul>
@@ -101,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/BnMclass/binaryNmulti.html">Developing neural network models for binary and multi-class classification problems</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/BnMclass/binaryNmulti.html">Developing neural network models for classification problems using PyTorch</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -131,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../projects/BnMclass/binaryNmulti.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Developing neural network models for binary and multi-class classification problems</span></a>
+ <span class="menu-text">Developing neural network models for classification problems using PyTorch</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -206,14 +240,42 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#binary-classification-problem" id="toc-binary-classification-problem" class="nav-link active" data-scroll-target="#binary-classification-problem"><span class="header-section-number">1</span> Binary Classification Problem</a>
+  <ul class="collapse">
+  <li><a href="#prepare-and-explore-the-data" id="toc-prepare-and-explore-the-data" class="nav-link" data-scroll-target="#prepare-and-explore-the-data"><span class="header-section-number">1.1</span> Prepare and explore the data</a></li>
+  <li><a href="#build-the-model" id="toc-build-the-model" class="nav-link" data-scroll-target="#build-the-model"><span class="header-section-number">1.2</span> Build the model</a></li>
+  <li><a href="#train-and-evaluate-the-model" id="toc-train-and-evaluate-the-model" class="nav-link" data-scroll-target="#train-and-evaluate-the-model"><span class="header-section-number">1.3</span> Train and evaluate the model</a>
+  <ul class="collapse">
+  <li><a href="#define-accuracy-function" id="toc-define-accuracy-function" class="nav-link" data-scroll-target="#define-accuracy-function"><span class="header-section-number">1.3.1</span> Define accuracy function</a></li>
+  <li><a href="#setup-loss-and-optimizer" id="toc-setup-loss-and-optimizer" class="nav-link" data-scroll-target="#setup-loss-and-optimizer"><span class="header-section-number">1.3.2</span> Setup loss and optimizer</a></li>
+  <li><a href="#visualizing-the-decision-boundary" id="toc-visualizing-the-decision-boundary" class="nav-link" data-scroll-target="#visualizing-the-decision-boundary"><span class="header-section-number">1.3.3</span> Visualizing the decision boundary</a></li>
+  </ul></li>
+  <li><a href="#improve-the-model" id="toc-improve-the-model" class="nav-link" data-scroll-target="#improve-the-model"><span class="header-section-number">1.4</span> Improve the model</a></li>
+  </ul></li>
+  <li><a href="#multi-class-classification-problem" id="toc-multi-class-classification-problem" class="nav-link" data-scroll-target="#multi-class-classification-problem"><span class="header-section-number">2</span> Multi-Class Classification Problem</a>
+  <ul class="collapse">
+  <li><a href="#prepare-and-explore-the-data-1" id="toc-prepare-and-explore-the-data-1" class="nav-link" data-scroll-target="#prepare-and-explore-the-data-1"><span class="header-section-number">2.1</span> Prepare and explore the data</a></li>
+  <li><a href="#build-the-model-1" id="toc-build-the-model-1" class="nav-link" data-scroll-target="#build-the-model-1"><span class="header-section-number">2.2</span> Build the model</a></li>
+  <li><a href="#train-and-evaluate-the-model-1" id="toc-train-and-evaluate-the-model-1" class="nav-link" data-scroll-target="#train-and-evaluate-the-model-1"><span class="header-section-number">2.3</span> Train and evaluate the model</a>
+  <ul class="collapse">
+  <li><a href="#setup-loss-and-optimizer-1" id="toc-setup-loss-and-optimizer-1" class="nav-link" data-scroll-target="#setup-loss-and-optimizer-1"><span class="header-section-number">2.3.1</span> Setup loss and optimizer</a></li>
+  <li><a href="#visualizing-the-decision-boundary-1" id="toc-visualizing-the-decision-boundary-1" class="nav-link" data-scroll-target="#visualizing-the-decision-boundary-1"><span class="header-section-number">2.3.2</span> Visualizing the decision boundary</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">3</span> Conclusion</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Developing neural network models for binary and multi-class classification problems</h1>
+<h1 class="title">Developing neural network models for classification problems using PyTorch</h1>
 </div>
 
 
@@ -228,9 +290,646 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>This will be published by 27.08.2024</p>
+<p>In this project, we are going to explore how to use PyTorch to solve classification problems, specifically binary and multi-class classification problems. To achieve this, we will utilize the built-in datasets from the scikit-learn module and perform modeling using PyTorch.</p>
+<p>We will follow these steps:</p>
+<ol type="1">
+<li>Prepare and explore the data</li>
+<li>Build a model</li>
+<li>Train and evaluate the model</li>
+<li>Improve the model (if needed)</li>
+</ol>
+<p>Let’s first look at the binary classification problem, and then move on to the multi-class classification problem.</p>
+<section id="binary-classification-problem" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Binary Classification Problem</h1>
+<div class="cell" data-execution_count="1">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import all the required modules</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_circles</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn</span></code></pre></div>
+</details>
+</div>
+<section id="prepare-and-explore-the-data" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="prepare-and-explore-the-data"><span class="header-section-number">1.1</span> Prepare and explore the data</h2>
+<p>To demonstrate the binary classification problem, we will use the <code>make_circles()</code> method from scikit-learn to generate two circles with differently colored dots.</p>
+<div class="cell" data-execution_count="2">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make 1000 samples</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create circles</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_circles(n_samples, noise<span class="op">=</span><span class="fl">0.03</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span></code></pre></div>
+</details>
+</div>
+<p>Now, let’s explore our dataset.</p>
+<div class="cell" data-execution_count="3">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimensions of our features and labels</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The dimension of feature X: </span><span class="sc">{</span>X<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The dimension of label y: </span><span class="sc">{</span>y<span class="sc">.</span>ndim<span class="sc">}</span><span class="ss">"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the shapes of our features and labels</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The shape of feature X: </span><span class="sc">{</span>X<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The shape of label y: </span><span class="sc">{</span>y<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>) <span class="co"># y is a scalar</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># View the first example of features and labels</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Values for FIRST sample of X: </span><span class="sc">{</span>X[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> and the same for y: </span><span class="sc">{</span>y[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shapes for FIRST sample of X: </span><span class="sc">{</span>X[<span class="dv">0</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss"> and the same for y: </span><span class="sc">{</span>y[<span class="dv">0</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Count no. of samples per label</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>unique_values, counts <span class="op">=</span> np.unique(y, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>unique_counts_dict <span class="op">=</span> {<span class="ss">f'Label </span><span class="sc">{</span>val<span class="sc">}</span><span class="ss">'</span>: <span class="ss">f'</span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> samples'</span> <span class="cf">for</span> val, count <span class="kw">in</span> <span class="bu">zip</span>(unique_values, counts)}</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_counts_dict, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># View first five samples</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First five X features:</span><span class="ch">\n</span><span class="sc">{</span>X[:<span class="dv">5</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">First five corresponding y labels:</span><span class="ch">\n</span><span class="sc">{</span>y[:<span class="dv">5</span>]<span class="sc">}</span><span class="ss">"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>The dimension of feature X: 2
+The dimension of label y: 1
+
+The shape of feature X: (1000, 2)
+The shape of label y: (1000,)
+
+Values for FIRST sample of X: [0.75424625 0.23148074] and the same for y: 1
+Shapes for FIRST sample of X: (2,) and the same for y: ()
+
+{'Label 0': '500 samples', 'Label 1': '500 samples'}
+
+First five X features:
+[[ 0.75424625  0.23148074]
+ [-0.75615888  0.15325888]
+ [-0.81539193  0.17328203]
+ [-0.39373073  0.69288277]
+ [ 0.44220765 -0.89672343]]
+
+First five corresponding y labels:
+[1 1 1 1 0]</code></pre>
+<p>From the above results, we can see that there are 1000 samples of feature vector X with a dimension of 2 corresponding to 1000 samples of scalar label y with a dimension of 1. This means each pair of X features (say X1 and X2) has one corresponding label y, which is a scalar that is either 0 or 1. Therefore, we have two inputs for one output. Notice that we also have a balanced dataset, i.e., 500 samples per each label.</p>
+<p>Now let’s visualize the dataset.</p>
+<div class="cell" data-execution_count="4">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize dataset with a plot</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>X[:, <span class="dv">0</span>], y<span class="op">=</span>X[:, <span class="dv">1</span>], c<span class="op">=</span>y, cmap<span class="op">=</span>plt.cm.RdYlBu)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Circles Dataset"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Feature 2"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_10_0.png" class="img-fluid"></p>
+<p>Now, let’s find out how we could build a neural network using PyTorch to classify the dots into red (0) or blue (1), given X1 and X2 (x-axis and y-axis in the above plot). But, before proceeding to build the PyTorch model, we must first convert our data into tensors and split it into 80% training and 20% testing datasets.</p>
+<div class="cell" data-execution_count="5">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn the data into tensors</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.tensor(X, dtype<span class="op">=</span>torch.<span class="bu">float</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.tensor(y, dtype<span class="op">=</span>torch.<span class="bu">float</span>)</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="6">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split data into train and test sets</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of training and testing samples</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of training samples: </span><span class="sc">{</span><span class="bu">len</span>(X_train)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of testing samples: </span><span class="sc">{</span><span class="bu">len</span>(X_test)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Number of training samples: 800
+Number of testing samples: 200</code></pre>
+</section>
+<section id="build-the-model" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="build-the-model"><span class="header-section-number">1.2</span> Build the model</h2>
+<p>Now that we have our data ready, let’s build our model using PyTorch.</p>
+<p>Since our data is not linearly separable, we will use a non-linear activation function such as ReLU in the model.</p>
+<div class="cell" data-execution_count="7">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the model</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CircleModel(nn.Module):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, hidden_units<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer_1 <span class="op">=</span> nn.Linear(<span class="dv">2</span>, hidden_units)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer_2 <span class="op">=</span> nn.Linear(hidden_units, hidden_units)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layer_3 <span class="op">=</span> nn.Linear(hidden_units, <span class="dv">1</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.relu <span class="op">=</span> nn.ReLU()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.relu(<span class="va">self</span>.layer_1(x))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.relu(<span class="va">self</span>.layer_2(x))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.layer_3(x)</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="train-and-evaluate-the-model" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="train-and-evaluate-the-model"><span class="header-section-number">1.3</span> Train and evaluate the model</h2>
+<p>Now, let’s define <code>train_and_evaluate()</code> function to train and evaluate the model. This function trains the model for a specified number of epochs, computes training and testing loss and accuracy, and prints the results every 100 epochs.</p>
+<p>The PyTorch <code>training</code> loop typically contains the following steps:</p>
+<ul>
+<li><p><strong>Forward pass</strong> - The model takes <code>X_train</code> as input, performs <code>forward()</code> function calculations, and then outputs raw prediction scores (logits) (<code>y_logits = model(X_train).squeeze()</code>). These logits are then converted into prediction probabilities by the sigmoid activation function. Finally, we round the probabilities to 0 or 1 according to the set threshold (here we use 0.5) to get binary predictions (<code>y_pred = torch.round(torch.sigmoid(y_logits)</code>).</p></li>
+<li><p><strong>Calculate the loss</strong> - The model’s outputs (predictions) are compared to the actual values and evaluated to see how wrong they are (<code>loss_fn(y_pred, y_train)</code>).</p></li>
+<li><p><strong>Zero the gradients</strong> - Clears the gradients of all model parameters, resetting them to zero. This is necessary because gradients accumulate by default in PyTorch (<code>optimizer.zero_grad()</code>).</p></li>
+<li><p><strong>Perform backpropagation</strong> - Performs backpropagation, calculating the gradient of the loss with respect to each model parameter (<code>loss.backward()</code>).</p></li>
+<li><p><strong>Step the optimizer</strong> (gradient descent) - Updates the model parameters using the gradients computed in the backward pass (<code>optimizer.step()</code>).</p></li>
+</ul>
+<p>In the <code>evaluation</code> loop, we use testing data to evaluate the performance of the model by computing the model’s predictions (logits) on the test data, converting the logits to probabilities, and then to binary predictions, similar to the training loop.</p>
+<div class="cell" data-execution_count="8">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_evaluate(model, X_train, y_train, X_test, y_test, loss_fn, optimizer, epochs, device<span class="op">=</span><span class="st">'cpu'</span>):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure the model is on the correct device</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    model.to(device)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Move data to the device</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    X_train, y_train <span class="op">=</span> X_train.to(device), y_train.to(device)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    X_test, y_test <span class="op">=</span> X_test.to(device), y_test.to(device)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Training</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Forward pass</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        y_logits <span class="op">=</span> model(X_train).squeeze()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        y_pred <span class="op">=</span> torch.<span class="bu">round</span>(torch.sigmoid(y_logits))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate loss and accuracy</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_logits, y_train) <span class="co"># BCEWithLogitsLoss calculates loss using logits</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        acc <span class="op">=</span> accuracy_fn(y_true<span class="op">=</span>y_train, y_pred<span class="op">=</span>y_pred)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Optimizer zero grad</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate the Loss</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Optimizer step</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Testing</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>        model.<span class="bu">eval</span>()</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Forward pass</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>            test_logits <span class="op">=</span> model(X_test).squeeze()</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>            test_pred <span class="op">=</span> torch.<span class="bu">round</span>(torch.sigmoid(test_logits)) <span class="co"># logits -&gt; prediction probabilities -&gt; prediction labels</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate loss and accuracy</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>            test_loss <span class="op">=</span> loss_fn(test_logits, y_test)</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>            test_acc <span class="op">=</span> accuracy_fn(y_true<span class="op">=</span>y_test, y_pred<span class="op">=</span>test_pred)</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Print out what's happening</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Epoch: </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss"> | Loss: </span><span class="sc">{</span>loss<span class="sc">:.5f}</span><span class="ss">, Accuracy: </span><span class="sc">{</span>acc<span class="sc">:.2f}</span><span class="ss">% | Test Loss: </span><span class="sc">{</span>test_loss<span class="sc">:.5f}</span><span class="ss">, Test Accuracy: </span><span class="sc">{</span>test_acc<span class="sc">:.2f}</span><span class="ss">%"</span>)</span></code></pre></div>
+</details>
+</div>
+<section id="define-accuracy-function" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="define-accuracy-function"><span class="header-section-number">1.3.1</span> Define accuracy function</h3>
+<p>Since our dataset is a balanced dataset, in addition to the <code>loss</code> evaluation metric, we’ll also use the <code>accuracy</code> evaluation metric. Accuracy measures the proportion of correctly classified samples out of the total number of samples. We define a function called <code>accuracy_fn()</code> to perform this task.</p>
+<div class="cell" data-execution_count="9">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate accuracy</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> accuracy_fn(y_true, y_pred):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    correct <span class="op">=</span> torch.eq(y_true, y_pred).<span class="bu">sum</span>().item()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (correct <span class="op">/</span> <span class="bu">len</span>(y_pred)) <span class="op">*</span> <span class="dv">100</span></span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="setup-loss-and-optimizer" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="setup-loss-and-optimizer"><span class="header-section-number">1.3.2</span> Setup loss and optimizer</h3>
+<p>Since we are doing binary classification, we can either use <code>torch.nn.BCELossWithLogits</code> or <code>torch.nn.BCELoss</code> as our loss function. Let’s use <code>torch.nn.BCELossWithLogits</code> for this simple problem as it has a built-in sigmoid activation and is also more numerically stable than <code>torch.nn.BCELoss</code>. As for the optimizer, let’s use <code>torch.optim.SGD()</code> to optimize the model parameters with a learning rate of 0.1.</p>
+<p>Let’s first set up device-agnostic code and then instantiate the model.</p>
+<div class="cell" data-execution_count="10">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set random seed for reproducibility</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup device agnostic code</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> <span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Instantiate the model</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> CircleModel().to(device)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup loss function</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> nn.BCEWithLogitsLoss()  <span class="co"># BCEWithLogitsLoss includes sigmoid</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup optimizer</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.1</span>)</span></code></pre></div>
+</details>
+</div>
+<p>Now let’s train and evaluate the model using the above-defined <code>train_and_evaluate()</code> function for 1000 epochs.</p>
+<div class="cell" data-execution_count="11">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>train_and_evaluate(model, X_train, y_train, X_test, y_test, loss_fn, optimizer, epochs<span class="op">=</span><span class="dv">1000</span>, device<span class="op">=</span>device)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Epoch: 0 | Loss: 0.69295, Accuracy: 50.00% | Test Loss: 0.69319, Test Accuracy: 50.00%
+Epoch: 100 | Loss: 0.69115, Accuracy: 52.88% | Test Loss: 0.69102, Test Accuracy: 52.50%
+Epoch: 200 | Loss: 0.68977, Accuracy: 53.37% | Test Loss: 0.68940, Test Accuracy: 55.00%
+Epoch: 300 | Loss: 0.68795, Accuracy: 53.00% | Test Loss: 0.68723, Test Accuracy: 56.00%
+Epoch: 400 | Loss: 0.68517, Accuracy: 52.75% | Test Loss: 0.68411, Test Accuracy: 56.50%
+Epoch: 500 | Loss: 0.68102, Accuracy: 52.75% | Test Loss: 0.67941, Test Accuracy: 56.50%
+Epoch: 600 | Loss: 0.67515, Accuracy: 54.50% | Test Loss: 0.67285, Test Accuracy: 56.00%
+Epoch: 700 | Loss: 0.66659, Accuracy: 58.38% | Test Loss: 0.66322, Test Accuracy: 59.00%
+Epoch: 800 | Loss: 0.65160, Accuracy: 64.00% | Test Loss: 0.64757, Test Accuracy: 67.50%
+Epoch: 900 | Loss: 0.62362, Accuracy: 74.00% | Test Loss: 0.62145, Test Accuracy: 79.00%</code></pre>
+<p>Ideally, the loss should steadily decrease to 0 while accuracy increases to 100%. However, we can see that although accuracy is steadily increasing, the loss remains almost stagnant. This may be due to the following reasons:</p>
+<p><strong>Difference between loss function and accuracy metrics:</strong></p>
+<p>Loss functions and accuracy metrics can respond differently to changes in predictions. For example, we are using nn.BCEWithLogitsLoss, which measures the difference between the predicted probabilities and the true labels, while accuracy simply counts the proportion of correct predictions. Accuracy is a more straightforward metric, reflecting whether predictions match the labels. In contrast, loss considers how confident the predictions are and penalizes incorrect predictions more if they are made with high confidence.</p>
+<p><strong>Prediction probabilities and thresholding:</strong></p>
+<p>To classify the data, our model is using a threshold of <strong>0.5</strong> to convert prediction probabilities into binary predictions. Therefore, accuracy may appear high if the model’s predictions are often very close to the threshold. However, the loss function still evaluates based on the exact probability values, which might not improve if the model’s confidence is misplaced.</p>
+<p>Let’s plot the decision boundary of the model using both the train and test data to understand how well our model has learned.</p>
+</section>
+<section id="visualizing-the-decision-boundary" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="visualizing-the-decision-boundary"><span class="header-section-number">1.3.3</span> Visualizing the decision boundary</h3>
+<p>A decision boundary is a line or a surface that separates different classes in a dataset. We’ll define <code>plot_decision_boundary()</code> function to plot the decision boundary for our dataset. It creates a grid of points covering the feature space, passes these points through the model to get predictions, and then plots these predictions along with the actual data points.</p>
+<div class="cell" data-execution_count="12">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Tensor):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Plot the decision boundary of a model's predictions on X against y."""</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure model and data are on CPU</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> torch.device(<span class="st">"cpu"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    model.to(device)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    X, y <span class="op">=</span> X.to(device), y.to(device)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set up grid boundaries for plotting</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    x_min, x_max <span class="op">=</span> X[:, <span class="dv">0</span>].<span class="bu">min</span>().item() <span class="op">-</span> <span class="fl">0.1</span>, X[:, <span class="dv">0</span>].<span class="bu">max</span>().item() <span class="op">+</span> <span class="fl">0.1</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    y_min, y_max <span class="op">=</span> X[:, <span class="dv">1</span>].<span class="bu">min</span>().item() <span class="op">-</span> <span class="fl">0.1</span>, X[:, <span class="dv">1</span>].<span class="bu">max</span>().item() <span class="op">+</span> <span class="fl">0.1</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    xx, yy <span class="op">=</span> np.meshgrid(</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        np.linspace(x_min, x_max, <span class="dv">101</span>),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        np.linspace(y_min, y_max, <span class="dv">101</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate predictions for grid points</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    X_to_pred_on <span class="op">=</span> torch.from_numpy(np.c_[xx.ravel(), yy.ravel()]).<span class="bu">float</span>().to(device)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        y_logits <span class="op">=</span> model(X_to_pred_on)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Determine prediction labels based on problem type (binary vs. multi-class)</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> (</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        torch.softmax(y_logits, dim<span class="op">=</span><span class="dv">1</span>).argmax(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> y.unique().numel() <span class="op">&gt;</span> <span class="dv">2</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> torch.sigmoid(y_logits).<span class="bu">round</span>()</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reshape predictions and plot the decision boundary</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> y_pred.reshape(xx.shape).cpu().numpy()</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    plt.contourf(xx, yy, y_pred, cmap<span class="op">=</span>plt.cm.RdYlBu, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    plt.scatter(X[:, <span class="dv">0</span>].cpu(), X[:, <span class="dv">1</span>].cpu(), c<span class="op">=</span>y.cpu(), s<span class="op">=</span><span class="dv">40</span>, cmap<span class="op">=</span>plt.cm.RdYlBu)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    plt.xlim(xx.<span class="bu">min</span>(), xx.<span class="bu">max</span>())</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    plt.ylim(yy.<span class="bu">min</span>(), yy.<span class="bu">max</span>())</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="13">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot decision boundaries for train set</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Train data"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plot_decision_boundary(model, X_train, y_train)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_33_0.png" class="img-fluid"></p>
+<div class="cell" data-execution_count="14">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot decision boundaries for test set</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test data"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>plot_decision_boundary(model, X_test, y_test)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_34_0.png" class="img-fluid"></p>
+<p>From the above diagrams, we can see that our model is underfitting, but not to the extent suggested by the loss value. For a loss value of around 0.6, we would expect about half of the points to be misclassified, but that’s not the case here. Therefore, the <code>accuracy</code> metric is more appropriate for evaluating the model.</p>
+</section>
+</section>
+<section id="improve-the-model" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="improve-the-model"><span class="header-section-number">1.4</span> Improve the model</h2>
+<p>Since our model is underfitting, we can improve the model in several ways, such as experimenting with different architectures, activation functions, or optimizers etc. As we have a simple problem to solve, let’s train it for another 1000 epochs and see what happens.</p>
+<div class="cell" data-execution_count="15">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>train_and_evaluate(model, X_train, y_train, X_test, y_test, loss_fn, optimizer, epochs<span class="op">=</span><span class="dv">1000</span>, device<span class="op">=</span>device)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Epoch: 0 | Loss: 0.56818, Accuracy: 87.75% | Test Loss: 0.57378, Test Accuracy: 86.50%
+Epoch: 100 | Loss: 0.48153, Accuracy: 93.50% | Test Loss: 0.49935, Test Accuracy: 90.50%
+Epoch: 200 | Loss: 0.37056, Accuracy: 97.75% | Test Loss: 0.40595, Test Accuracy: 92.00%
+Epoch: 300 | Loss: 0.25458, Accuracy: 99.00% | Test Loss: 0.30333, Test Accuracy: 96.50%
+Epoch: 400 | Loss: 0.17180, Accuracy: 99.50% | Test Loss: 0.22108, Test Accuracy: 97.50%
+Epoch: 500 | Loss: 0.12188, Accuracy: 99.62% | Test Loss: 0.16512, Test Accuracy: 99.00%
+Epoch: 600 | Loss: 0.09123, Accuracy: 99.88% | Test Loss: 0.12741, Test Accuracy: 99.50%
+Epoch: 700 | Loss: 0.07100, Accuracy: 99.88% | Test Loss: 0.10319, Test Accuracy: 99.50%
+Epoch: 800 | Loss: 0.05773, Accuracy: 99.88% | Test Loss: 0.08672, Test Accuracy: 99.50%
+Epoch: 900 | Loss: 0.04853, Accuracy: 99.88% | Test Loss: 0.07474, Test Accuracy: 99.50%</code></pre>
+<p>Looks like our model has converged and we got the results what we wanted i.e.&nbsp;loss close to zero and accuracy close to 100%. Now, let’s visualize the decision boundary to see what’s hapenning.</p>
+<div class="cell" data-execution_count="16">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot decision boundaries for test set</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Model Test"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plot_decision_boundary(model, X_test, y_test)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_40_0.png" class="img-fluid"></p>
+<p>The decision boundary plot also confirms that our model has improved.</p>
+<p>Now that we have done with our binary classification, let’s move on to multi-class classification problem.</p>
+</section>
+</section>
+<section id="multi-class-classification-problem" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Multi-Class Classification Problem</h1>
+<p>To demonstrate the multi-class classification problem, we will follow similar steps to those used in the binary classification problem above.</p>
+<section id="prepare-and-explore-the-data-1" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="prepare-and-explore-the-data-1"><span class="header-section-number">2.1</span> Prepare and explore the data</h2>
+<p>First, let’s import the required modules. We are re-importing most of the modules for the sake of completeness.</p>
+<div class="cell" data-execution_count="17">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the required modules</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn</span></code></pre></div>
+</details>
+</div>
+<p>Now, we will use the <code>make_blobs()</code> method from scikit-learn to generate isotropic Gaussian blobs.</p>
+<div class="cell" data-execution_count="18">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the hyperparameters for data creation</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>NUM_SAMPLES <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>NUM_CLASSES <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>NUM_FEATURES <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>RANDOM_SEED <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create multi-class data</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>X_blob, y_blob <span class="op">=</span> make_blobs(n_samples<span class="op">=</span>NUM_SAMPLES,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                            n_features<span class="op">=</span>NUM_FEATURES, <span class="co"># X features</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                            centers<span class="op">=</span>NUM_CLASSES, <span class="co"># y labels</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                            cluster_std<span class="op">=</span><span class="dv">2</span>, <span class="co"># standard deviation of the cluster</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                            random_state<span class="op">=</span>RANDOM_SEED</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>                            )</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Count no. of samples per label</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>unique_values, counts <span class="op">=</span> np.unique(y_blob, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>unique_counts_dict <span class="op">=</span> {<span class="ss">f'Label </span><span class="sc">{</span>val<span class="sc">}</span><span class="ss">'</span>: <span class="ss">f'</span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> samples'</span> <span class="cf">for</span> val, count <span class="kw">in</span> <span class="bu">zip</span>(unique_values, counts)}</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_counts_dict, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="co"># View ten samples</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Ten 'X' features:</span><span class="ch">\n</span><span class="sc">{</span>X_blob[<span class="op">-</span><span class="dv">10</span>:]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss"> Ten corresponding 'y' labels:</span><span class="ch">\n</span><span class="sc">{</span>y_blob[<span class="op">-</span><span class="dv">10</span>:]<span class="sc">}</span><span class="ss">"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>{'Label 0': '250 samples', 'Label 1': '250 samples', 'Label 2': '250 samples', 'Label 3': '250 samples'}
+
+ten X features:
+[[ 4.17800978  3.36558241]
+ [-4.18864131  7.81550084]
+ [ 5.25548237 -1.4471671 ]
+ [-9.00985452 -7.490559  ]
+ [ 6.93842549  0.56681683]
+ [-2.75662004 -4.46337713]
+ [-1.26095799 10.27097715]
+ [ 2.74108106  7.23793381]
+ [-8.0986516  -7.2540522 ]
+ [-9.96266381  6.90507917]]
+
+ ten corresponding y labels:
+[1 0 1 2 1 2 0 1 2 3]</code></pre>
+<p>The above <code>make_blobs()</code> function generates a balanced dataset with 1,000 samples, 2 features, 4 centers (clusters), and a specified spread within each cluster (cluster_std=2). The random_state parameter ensures that the data is the same every time it’s generated.</p>
+<p>Now, we will visualize our dataset.</p>
+<div class="cell" data-execution_count="19">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the dataset</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">7</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_blob[:, <span class="dv">0</span>], X_blob[:, <span class="dv">1</span>], c<span class="op">=</span>y_blob, cmap<span class="op">=</span>plt.cm.RdYlBu)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_52_0.png" class="img-fluid"></p>
+<p>Now, let’s prepare our data for modeling with PyTorch.</p>
+<div class="cell" data-execution_count="20">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Turn data into tensors</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>X_blob <span class="op">=</span> torch.tensor(X_blob, dtype<span class="op">=</span>torch.<span class="bu">float</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>y_blob <span class="op">=</span> torch.tensor(y_blob, dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="21">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into train and test sets</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>X_blob_train, X_blob_test, y_blob_train, y_blob_test <span class="op">=</span> train_test_split(X_blob, y_blob, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span>RANDOM_SEED)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of training and testing samples</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of training samples: </span><span class="sc">{</span><span class="bu">len</span>(X_blob_train)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Number of testing samples: </span><span class="sc">{</span><span class="bu">len</span>(X_blob_test)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Number of training samples: 800
+Number of testing samples: 200</code></pre>
+</section>
+<section id="build-the-model-1" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="build-the-model-1"><span class="header-section-number">2.2</span> Build the model</h2>
+<p>Now that we have our data ready, we will build our model using PyTorch.</p>
+<p>Since our data appears to be linearly separable in the above plot, let’s use only linear layers in the model and see if it works.</p>
+<div class="cell" data-execution_count="22">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BlobModel(nn.Module):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, input_features, output_features, hidden_units<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(BlobModel, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.linear_layer_stack <span class="op">=</span> nn.Sequential(</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>            nn.Linear(input_features, hidden_units),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>            nn.Linear(hidden_units, hidden_units),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>            nn.Linear(hidden_units, output_features)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.linear_layer_stack(x)</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="train-and-evaluate-the-model-1" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="train-and-evaluate-the-model-1"><span class="header-section-number">2.3</span> Train and evaluate the model</h2>
+<p>Now that we have our model ready, we will define the <code>train_and_evaluate()</code> function similarly to how we defined it for binary classification. This function will train and evaluate the model, running for a specified number of epochs, computing training and testing loss and accuracy, and printing the results every 100 epochs.</p>
+<p>We have already discussed the steps involved in training and evaluating PyTorch models in the binary classification problem. For multi-class classification, we need to adjust the function to accommodate the specifics of this problem, such as the forward pass and the use of different loss functions and optimizers.</p>
+<p>In the forward pass, the model outputs logits (raw predictions), which are then converted to predicted labels using the <code>argmax()</code> function.</p>
+<p>Here, we’ll use the <code>nn.CrossEntropyLoss()</code> method as our loss function. For the optimizer, we will use <code>torch.optim.SGD()</code> to optimize the model parameters with a learning rate of 0.1.</p>
+<p>Additionally, we will use the previously defined <code>accuracy_fn()</code> function to evaluate accuracy.</p>
+<div class="cell" data-execution_count="23">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_evaluate(model, X_blob_train, y_blob_train, X_blob_test, y_blob_test, loss_fn, optimizer, epochs<span class="op">=</span><span class="dv">1000</span>, device<span class="op">=</span><span class="st">'cpu'</span>):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ensure the model is on the correct device</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    model.to(device)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Move data to the device</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    X_blob_train, y_blob_train <span class="op">=</span> X_blob_train.to(device), y_blob_train.to(device)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    X_blob_test, y_blob_test <span class="op">=</span> X_blob_test.to(device), y_blob_test.to(device)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Trainig</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        model.train()</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Forward pass</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>        y_logits <span class="op">=</span> model(X_blob_train)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">#y_pred = y_logits.argmax(dim=1)</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        y_pred <span class="op">=</span> torch.softmax(y_logits, dim<span class="op">=</span><span class="dv">1</span>).argmax(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate loss and accuracy</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_logits, y_blob_train)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>        acc <span class="op">=</span> accuracy_fn(y_blob_train, y_pred)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Optimizer zero grad</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Loss backward</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Optimizer step</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">## Testing</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>        model.<span class="bu">eval</span>()</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>            test_logits <span class="op">=</span> model(X_blob_test)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>            <span class="co">#test_pred = test_logits.argmax(dim=1)</span></span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>            test_pred <span class="op">=</span> torch.softmax(test_logits, dim<span class="op">=</span><span class="dv">1</span>).argmax(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate test loss and accuracy</span></span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>            test_loss <span class="op">=</span> loss_fn(test_logits, y_blob_test)</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>            test_acc <span class="op">=</span> accuracy_fn(y_blob_test, test_pred)</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Print out what's happening</span></span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Epoch: </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss"> | Train Loss: </span><span class="sc">{</span>loss<span class="sc">:.5f}</span><span class="ss">, Train Accuracy: </span><span class="sc">{</span>acc<span class="sc">:.2f}</span><span class="ss">% | Test Loss: </span><span class="sc">{</span>test_loss<span class="sc">:.5f}</span><span class="ss">, Test Accuracy: </span><span class="sc">{</span>test_acc<span class="sc">:.2f}</span><span class="ss">%"</span>)</span></code></pre></div>
+</details>
+</div>
+<section id="setup-loss-and-optimizer-1" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="setup-loss-and-optimizer-1"><span class="header-section-number">2.3.1</span> Setup loss and optimizer</h3>
+<div class="cell" data-execution_count="24">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set random seed for reproducibility</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup device agnostic code</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> <span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize model, loss function, and optimizer</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> BlobModel(input_features<span class="op">=</span>NUM_FEATURES, output_features<span class="op">=</span>NUM_CLASSES, hidden_units<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup loss function</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> nn.CrossEntropyLoss()</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup optimizer</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.1</span>)</span></code></pre></div>
+</details>
+</div>
+<p>Now we will train and evaluate the model using the <code>train_and_evaluate()</code> function for 1000 epochs.</p>
+<div class="cell" data-execution_count="25">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>train_and_evaluate(model, X_blob_train, y_blob_train, X_blob_test, y_blob_test, loss_fn, optimizer, epochs<span class="op">=</span><span class="dv">1000</span>, device<span class="op">=</span>device)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Epoch: 0 | Train Loss: 1.05193, Train Accuracy: 63.00% | Test Loss: 0.59764, Test Accuracy: 91.50%
+Epoch: 100 | Train Loss: 0.09545, Train Accuracy: 96.25% | Test Loss: 0.08077, Test Accuracy: 96.50%
+Epoch: 200 | Train Loss: 0.09102, Train Accuracy: 96.25% | Test Loss: 0.07636, Test Accuracy: 96.50%
+Epoch: 300 | Train Loss: 0.08858, Train Accuracy: 96.25% | Test Loss: 0.07355, Test Accuracy: 96.50%
+Epoch: 400 | Train Loss: 0.08655, Train Accuracy: 96.38% | Test Loss: 0.07098, Test Accuracy: 96.50%
+Epoch: 500 | Train Loss: 0.08469, Train Accuracy: 96.38% | Test Loss: 0.06858, Test Accuracy: 96.50%
+Epoch: 600 | Train Loss: 0.08296, Train Accuracy: 96.38% | Test Loss: 0.06633, Test Accuracy: 97.00%
+Epoch: 700 | Train Loss: 0.08133, Train Accuracy: 96.62% | Test Loss: 0.06422, Test Accuracy: 97.00%
+Epoch: 800 | Train Loss: 0.07980, Train Accuracy: 96.62% | Test Loss: 0.06224, Test Accuracy: 97.00%
+Epoch: 900 | Train Loss: 0.07844, Train Accuracy: 96.62% | Test Loss: 0.05917, Test Accuracy: 97.50%</code></pre>
+</section>
+<section id="visualizing-the-decision-boundary-1" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="visualizing-the-decision-boundary-1"><span class="header-section-number">2.3.2</span> Visualizing the decision boundary</h3>
+<p>Here we will use the previously defined <code>plot_decision_boundary()</code> function to plot the decision boundaries for our model.</p>
+<div class="cell" data-execution_count="26">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot decision boundaries</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Train data"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plot_decision_boundary(model, X_blob_train, y_blob_train)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test data"</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>plot_decision_boundary(model, X_blob_test, y_blob_test)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_68_0.png" class="img-fluid"></p>
+<p>From the results above, we can see that our model has nearly 0 loss and 97% accuracy. This indicates that it is performing quite well, and there may be no need for further improvements.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Conclusion</h1>
+<p>Therefore, we’ve successfully built, trained, and evaluated a neural network model for binary and multi-class classification problems using PyTorch.</p>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

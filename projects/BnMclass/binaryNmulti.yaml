@@ -1,4 +1,4 @@
-- title: Developing neural network models for binary and multi-class classification problems
+- title: Developing neural network models for classification problems using PyTorch
   path: projects/BnMclass/binaryNmulti.qmd
-#  image: projects/BnMclass/parsetree.png
-  categories: [PyTorch, SCIKIT-LEARN, MATPLOTLIB]
+  image: projects/BnMclass/samplebNm.png
+  categories: [PyTorch, NumPy, Matplotlib, scikit-learn, Python, All]

@@ -36,11 +36,11 @@ listing:
   
   - id: overview
     type: grid
-#    categories: unnumbered
+    categories: cloud
     contents:
-      - projects/Bert/bertmodel.qmd
-      - projects/BnMclass/binaryNmulti.qmd
-      - projects/FashionMNIST/fashionMNIST.qmd
+      - projects/Bert/bertmodel.yaml
+      - projects/BnMclass/binaryNmulti.yaml
+      - projects/FashionMNIST/fashionMNIST.yaml
       - projects/MNIST/mnist.yaml
       - projects/NimGame/nimgame.yaml
       - projects/ParseTrees/parsetrees.yaml

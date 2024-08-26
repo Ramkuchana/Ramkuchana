@@ -1,4 +1,4 @@
 - title: Generating parse trees and extracting noun phrases
   path: projects/ParseTrees/ParsetreesNnounphrases.qmd
   image: projects/ParseTrees/parsetree.png
-  categories: [NLTK]
+  categories: [NLTK, Python, All]
