@@ -1,4 +1,4 @@
-- title: Building a model to identify the type of clothing in the image
+- title: Building neural network models to identify the type of clothing in images
   path: projects/FashionMNIST/fashionMNIST.qmd
-#  image: projects/ParseTrees/parsetree.png
-  categories: [PyTorch, Matplotlib, scikit-learn, Python, All]
+  image: projects/FashionMNIST/samplefashion.png
+  categories: [PyTorch, Matplotlib, Pandas, Python, All]

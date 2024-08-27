@@ -11,7 +11,7 @@
     "href": "index.html#projects",
     "title": "Sai Ram Kuchana",
     "section": "Projects",
-    "text": "Projects\n\n\n\n\n\n\n\n\n\n\nUsing a pre-trained BERT model for text prediction and analysing its self-attention scores\n\n\n\nPyTorch\n\n\nPIL\n\n\nTransformers\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDeveloping neural network models for classification problems using PyTorch\n\n\n\nPyTorch\n\n\nNumPy\n\n\nMatplotlib\n\n\nscikit-learn\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\nBuilding a model to identify the type of clothing in the image\n\n\n\nPyTorch\n\n\nMatplotlib\n\n\nscikit-learn\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNearest neighbor for handwritten digit recognition\n\n\n\nNumPy\n\n\nMatplotlib\n\n\nscikit-learn\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTraining an AI to play a game using reinforcement learning\n\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGenerating parse trees and extracting noun phrases\n\n\n\nNLTK\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing SQL to find the missing packages in the mail delivery service’s database\n\n\n\nSQL\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSoft deletions, views, and triggers in the context of a museum’s database\n\n\n\nSQL\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding a dashboard for the sales using Tableau\n\n\n\nTableau\n\n\nAll\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Projects\n\n\n\n\n\n\n\n\n\n\nUsing a pre-trained BERT model for text prediction and analysing its self-attention scores\n\n\n\nPyTorch\n\n\nPIL\n\n\nTransformers\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDeveloping neural network models for classification problems using PyTorch\n\n\n\nPyTorch\n\n\nNumPy\n\n\nMatplotlib\n\n\nscikit-learn\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding neural network models to identify the type of clothing in images\n\n\n\nPyTorch\n\n\nMatplotlib\n\n\nPandas\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNearest neighbor for handwritten digit recognition\n\n\n\nNumPy\n\n\nMatplotlib\n\n\nscikit-learn\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTraining an AI to play a game using reinforcement learning\n\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGenerating parse trees and extracting noun phrases\n\n\n\nNLTK\n\n\nPython\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing SQL to find the missing packages in the mail delivery service’s database\n\n\n\nSQL\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSoft deletions, views, and triggers in the context of a museum’s database\n\n\n\nSQL\n\n\nAll\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding a dashboard for the sales using Tableau\n\n\n\nTableau\n\n\nAll\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects/SQLPackages/packages.html",
@@ -100,9 +100,16 @@
   {
     "objectID": "projects/FashionMNIST/fashionMNIST.html",
     "href": "projects/FashionMNIST/fashionMNIST.html",
-    "title": "Building a model to identify the type of clothing in the image",
+    "title": "Building neural network models to identify the type of clothing in images",
     "section": "",
-    "text": "This will be published by 27.08.2024\n\n\n\n Back to top"
+    "text": "In this project, we will build neural network models to classify the type of clothing in images from the FashionMNIST dataset.\nWe will start by building a simple neural network model that will serve as a baseline for comparison with a more complex model, such as a Convolutional Neural Network (CNN) model.\nCode\n# Import necessary libraries\n\nimport torch\nfrom torch import nn\nimport torchvision\nfrom torchvision import datasets, transforms\nfrom torch.utils.data import DataLoader\nimport matplotlib.pyplot as plt\nfrom tqdm.auto import tqdm\nfrom timeit import default_timer as timer\nimport pandas as pd\nfrom torchmetrics import ConfusionMatrix\nfrom mlxtend.plotting import plot_confusion_matrix"
+  },
+  {
+    "objectID": "projects/FashionMNIST/fashionMNIST.html#define-print_train_time-and-accuracy_fn",
+    "href": "projects/FashionMNIST/fashionMNIST.html#define-print_train_time-and-accuracy_fn",
+    "title": "Building neural network models to identify the type of clothing in images",
+    "section": "2.1 Define print_train_time() and accuracy_fn",
+    "text": "2.1 Define print_train_time() and accuracy_fn\nWe will define a utility function print_train_time() that calculates the time taken for training, given the start and end times of the training process.\nWe will also define an accuracy evaluation metric using accuracy_fn(), which measures the proportion of correctly classified samples out of the total number of samples.\n\n\nCode\n# Utility function to print training time\n\ndef print_train_time(start: float, end: float, device: torch.device = None) -&gt; float:\n    total_time = end - start\n    print(f\"Train time on {device}: {total_time:.3f} seconds\")\n    return total_time\n\n# Accuracy calculation function\n\ndef accuracy_fn(y_true, y_pred) -&gt; float:\n    correct = torch.eq(y_true, y_pred).sum().item()\n    return (correct / len(y_pred)) * 100"
   },
   {
     "objectID": "projects/Bert/bertmodel.html",
