@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Nearest neighbor classifier for handwritten digit recognition</title>
+<title>Non-learning model for recognizing handwritten digit</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -137,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/MNIST/mnist.html">Nearest neighbor classifier for handwritten digit recognition</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/Bert/bertmodel.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/MNIST/mnist.html">Non-learning model for recognizing handwritten digit</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -179,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../projects/MNIST/mnist.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Nearest neighbor classifier for handwritten digit recognition</span></a>
+ <span class="menu-text">Non-learning model for recognizing handwritten digit</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -246,28 +246,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-mnist-dataset" id="toc-the-mnist-dataset" class="nav-link active" data-scroll-target="#the-mnist-dataset"><span class="header-section-number">1</span> The MNIST dataset</a></li>
-  <li><a href="#load-in-the-modules-and-the-dataset" id="toc-load-in-the-modules-and-the-dataset" class="nav-link" data-scroll-target="#load-in-the-modules-and-the-dataset"><span class="header-section-number">2</span> Load in the modules and the dataset</a></li>
-  <li><a href="#prepare-and-analyse-balanced-dataset" id="toc-prepare-and-analyse-balanced-dataset" class="nav-link" data-scroll-target="#prepare-and-analyse-balanced-dataset"><span class="header-section-number">3</span> Prepare and analyse balanced dataset</a></li>
-  <li><a href="#visualize-the-data" id="toc-visualize-the-data" class="nav-link" data-scroll-target="#visualize-the-data"><span class="header-section-number">4</span> Visualize the data</a>
+  <li><a href="#prepare-and-analyse-the-dataset" id="toc-prepare-and-analyse-the-dataset" class="nav-link active" data-scroll-target="#prepare-and-analyse-the-dataset"><span class="header-section-number">1</span> Prepare and analyse the dataset</a>
   <ul class="collapse">
-  <li><a href="#view-the-first-data-point-in-the-training-and-test-sets" id="toc-view-the-first-data-point-in-the-training-and-test-sets" class="nav-link" data-scroll-target="#view-the-first-data-point-in-the-training-and-test-sets"><span class="header-section-number">4.1</span> View the first data point in the training and test sets</a></li>
+  <li><a href="#explore-the-original-dataset" id="toc-explore-the-original-dataset" class="nav-link" data-scroll-target="#explore-the-original-dataset"><span class="header-section-number">1.1</span> Explore the original dataset</a></li>
+  <li><a href="#prepare-a-balanced-dataset-from-the-original-dataset" id="toc-prepare-a-balanced-dataset-from-the-original-dataset" class="nav-link" data-scroll-target="#prepare-a-balanced-dataset-from-the-original-dataset"><span class="header-section-number">1.2</span> Prepare a balanced dataset from the original dataset</a></li>
   </ul></li>
-  <li><a href="#compute-squared-euclidean-distance" id="toc-compute-squared-euclidean-distance" class="nav-link" data-scroll-target="#compute-squared-euclidean-distance"><span class="header-section-number">5</span> Compute squared Euclidean distance</a>
+  <li><a href="#baseline-nearest-neighbornn-model" id="toc-baseline-nearest-neighbornn-model" class="nav-link" data-scroll-target="#baseline-nearest-neighbornn-model"><span class="header-section-number">2</span> Baseline nearest neighbor(NN) model</a>
   <ul class="collapse">
-  <li><a href="#test-the-euclidean-distance-function" id="toc-test-the-euclidean-distance-function" class="nav-link" data-scroll-target="#test-the-euclidean-distance-function"><span class="header-section-number">5.1</span> Test the Euclidean distance function</a></li>
-  </ul></li>
-  <li><a href="#build-nearest-neighbornn-classifier" id="toc-build-nearest-neighbornn-classifier" class="nav-link" data-scroll-target="#build-nearest-neighbornn-classifier"><span class="header-section-number">6</span> Build nearest neighbor(NN) classifier</a></li>
-  <li><a href="#test-the-nn-classifier" id="toc-test-the-nn-classifier" class="nav-link" data-scroll-target="#test-the-nn-classifier"><span class="header-section-number">7</span> Test the NN classifier</a>
+  <li><a href="#squared-euclidean-distance" id="toc-squared-euclidean-distance" class="nav-link" data-scroll-target="#squared-euclidean-distance"><span class="header-section-number">2.1</span> Squared Euclidean distance</a>
   <ul class="collapse">
-  <li><a href="#compute-the-classification-time-of-nn" id="toc-compute-the-classification-time-of-nn" class="nav-link" data-scroll-target="#compute-the-classification-time-of-nn"><span class="header-section-number">7.1</span> Compute the classification time of NN</a></li>
-  <li><a href="#compute-the-error-rate-of-nn" id="toc-compute-the-error-rate-of-nn" class="nav-link" data-scroll-target="#compute-the-error-rate-of-nn"><span class="header-section-number">7.2</span> Compute the error rate of NN</a></li>
+  <li><a href="#test-the-euclidean-distance-function" id="toc-test-the-euclidean-distance-function" class="nav-link" data-scroll-target="#test-the-euclidean-distance-function"><span class="header-section-number">2.1.1</span> Test the Euclidean distance function</a></li>
   </ul></li>
-  <li><a href="#improve-nearest-neighbors" id="toc-improve-nearest-neighbors" class="nav-link" data-scroll-target="#improve-nearest-neighbors"><span class="header-section-number">8</span> Improve nearest neighbors</a>
+  </ul></li>
+  <li><a href="#build-the-baseline-nn-classifier" id="toc-build-the-baseline-nn-classifier" class="nav-link" data-scroll-target="#build-the-baseline-nn-classifier"><span class="header-section-number">3</span> Build the baseline NN classifier</a></li>
+  <li><a href="#test-the-baseline-nn-classifier" id="toc-test-the-baseline-nn-classifier" class="nav-link" data-scroll-target="#test-the-baseline-nn-classifier"><span class="header-section-number">4</span> Test the baseline NN classifier</a>
   <ul class="collapse">
-  <li><a href="#k-d-tree-algorithm" id="toc-k-d-tree-algorithm" class="nav-link" data-scroll-target="#k-d-tree-algorithm"><span class="header-section-number">8.1</span> k-d tree algorithm</a></li>
+  <li><a href="#classification-time-of-baseline-nn" id="toc-classification-time-of-baseline-nn" class="nav-link" data-scroll-target="#classification-time-of-baseline-nn"><span class="header-section-number">4.1</span> Classification time of baseline NN</a></li>
+  <li><a href="#error-rate-of-baseline-nn" id="toc-error-rate-of-baseline-nn" class="nav-link" data-scroll-target="#error-rate-of-baseline-nn"><span class="header-section-number">4.2</span> Error rate of baseline NN</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">9</span> Conclusion</a></li>
+  <li><a href="#k-d-tree-nearest-neighbor" id="toc-k-d-tree-nearest-neighbor" class="nav-link" data-scroll-target="#k-d-tree-nearest-neighbor"><span class="header-section-number">5</span> k-d tree nearest neighbor</a>
+  <ul class="collapse">
+  <li><a href="#k-d-tree-algorithm" id="toc-k-d-tree-algorithm" class="nav-link" data-scroll-target="#k-d-tree-algorithm"><span class="header-section-number">5.1</span> k-d tree algorithm</a></li>
+  <li><a href="#k-d-tree-on-the-full-mnist-dataset" id="toc-k-d-tree-on-the-full-mnist-dataset" class="nav-link" data-scroll-target="#k-d-tree-on-the-full-mnist-dataset"><span class="header-section-number">5.2</span> k-d tree on the full MNIST dataset</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -276,7 +278,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Nearest neighbor classifier for handwritten digit recognition</h1>
+<h1 class="title">Non-learning model for recognizing handwritten digit</h1>
 </div>
 
 
@@ -291,43 +293,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><br> In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Convolutional Neural Networks (CNNs) are usually preferred for such tasks because they are specifically designed to handle the spatial and hierarchical nature of image data, making them highly effective.</p>
-<p>However, in this project, let’s explore a simple strategy to build a classifier based on nearest neighbors (NN). We will then examine methods to improve classification time by reducing the nearest neighbor search time.</p>
-<section id="the-mnist-dataset" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> The MNIST dataset</h1>
-<p>We will use the <code>MNIST</code> dataset, which is a classic dataset in machine learning, to train our nearest neighbor classifier. It consists of 28x28 grayscale images of handwritten digits, along with corresponding labels (0 through 9) indicating the digit each image represents.</p>
-<p>The original MNIST training set contains 60,000 images, and the test set contains 10,000 images. However, for ease of computation on our 1.70 GHz Intel Core i7 (16GB RAM) laptop, which has limited computing power, we will prepare a subset of this original data and work with it.</p>
-</section>
-<section id="load-in-the-modules-and-the-dataset" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Load in the modules and the dataset</h1>
+<p>In this project, we will build a classifier that takes an image of a handwritten digit and recognizes the digit present in the image. Convolutional Neural Networks (CNNs) are usually preferred for such tasks because they are specifically designed to handle the spatial and hierarchical nature of image data, making them highly effective.</p>
+<p>However, in this project, just for the sake of exploring a new technique, let’s explore a simple strategy, a non-learning method which is based on finding the nearest neighbor(s) (NN) to build the image classifier and see how it performs.</p>
+<p>As brute force technique is used to find the nearest neighbor in our baseline NN classifier, let’s first work with a smaller dataset derived from our original dataset to reduce the computational time and make the algorithm work initially. Then, we will look at methods to improve the classification time that reduces the nearest neighbor search time.</p>
+<p>Finally, note that this project is not about finding a good classifier for our dataset. Its rather about exploring some other technique and reasoning why it works and why it does not work.</p>
 <div class="cell" data-execution_count="1">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load in the required modules</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gzip, os</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KDTree </span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gzip, os</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KDTree </span></code></pre></div>
 </details>
 </div>
+<section id="prepare-and-analyse-the-dataset" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Prepare and analyse the dataset</h1>
+<p>We will use the MNIST dataset to create a subset of our original dataset. The full MNIST dataset contains training set of 60,000 images, and the test set of 10,000 images, where each image consists of a 28x28 grayscale image of a handwritten digit, along with corresponding labels (0 through 9) indicating the digit it represents.</p>
+<p>But before creating a subset of our original dataset, let’s first explore our original dataset.</p>
 <p>We first download a <code>MNIST</code> data file from Yann Le Cun’s website. Then, we define functions <code>load_mnist_images</code> and <code>load_mnist_labels</code> to convert the binary format to the numpy ndarray that we can work with.</p>
 <div class="cell" data-execution_count="2">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reads the binary file and converts it into suitable numpy ndarray</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_mnist_images(filename):</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> gzip.<span class="bu">open</span>(filename, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.frombuffer(f.read(), np.uint8, offset<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">784</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data.astype(np.float32)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_mnist_labels(filename):</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> gzip.<span class="bu">open</span>(filename, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.frombuffer(f.read(), np.uint8, offset<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_mnist_images(filename):</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> gzip.<span class="bu">open</span>(filename, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.frombuffer(f.read(), np.uint8, offset<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">784</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> data.astype(np.float32)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_mnist_labels(filename):</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> gzip.<span class="bu">open</span>(filename, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.frombuffer(f.read(), np.uint8, offset<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data</span></code></pre></div>
 </details>
 </div>
 <div class="cell" data-execution_count="3">
@@ -342,120 +345,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>original_test_labels <span class="op">=</span> load_mnist_labels(<span class="st">'t10k-labels-idx1-ubyte.gz'</span>)</span></code></pre></div>
 </details>
 </div>
+<section id="explore-the-original-dataset" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="explore-the-original-dataset"><span class="header-section-number">1.1</span> Explore the original dataset</h2>
 <div class="cell" data-execution_count="4">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the dimensions and no. of labels of the original dataset</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the shape and no. of labels of the original dataset</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Training dataset dimensions: "</span>, np.shape(original_train_data))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of the training dataset: "</span>, np.shape(original_train_data))</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of training labels: "</span>, <span class="bu">len</span>(original_train_labels), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Testing dataset dimensions: "</span>, np.shape(original_test_data))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of the testing dataset: "</span>, np.shape(original_test_data))</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of testing labels: "</span>, <span class="bu">len</span>(original_test_labels))</span></code></pre></div>
 </details>
 </div>
-<pre><code>Training dataset dimensions:  (60000, 784)
+<pre><code>Shape of the training dataset:  (60000, 784)
 Number of training labels:  60000
 
-Testing dataset dimensions:  (10000, 784)
+Shape of the testing dataset:  (10000, 784)
 Number of testing labels:  10000</code></pre>
-</section>
-<section id="prepare-and-analyse-balanced-dataset" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Prepare and analyse balanced dataset</h1>
-<p>Now, let’s prepare a dataset from the original dataset that contains 8000 samples for the training set and 2000 samples for the test set, where samples are uniformly distributed across all labels (0 to 9) in both the sets. We define a function <code>balance_dataset</code> to carry out this task.</p>
+<p>We can see that each data point, i.e., a handwritten digit image in the dataset, is composed of 784 pixels and is stored as a vector with 784 coordinates/dimensions, where each coordinate has a numeric value ranging from 0 to 255.</p>
+<p>Let’s look at these numeric values by examining one of the images, say, the first image, in the dataset.</p>
 <div class="cell" data-execution_count="5">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> balance_dataset(original_data, original_labels, samples_per_label):</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print out the the first data point in training data </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> []</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> []</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iterate over each class label (0 to 9)</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> class_label <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Find indices where the label equals the current class label</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> np.where(original_labels <span class="op">==</span> class_label)[<span class="dv">0</span>]</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sample 'samples_per_class' indices uniformly from the current label</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        sampled_indices <span class="op">=</span> np.random.choice(indices, size<span class="op">=</span>samples_per_label, replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Append the sampled data and labels to the balanced dataset</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        balanced_data.append(original_data[sampled_indices])</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        balanced_labels.append(original_labels[sampled_indices])</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Concatenate the lists of arrays into single arrays</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> np.concatenate(balanced_data, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> np.concatenate(balanced_labels, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the balanced dataset (optional step)</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    shuffle_indices <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(balanced_data))</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> balanced_data[shuffle_indices]</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> balanced_labels[shuffle_indices]</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> balanced_data, balanced_labels</span></code></pre></div>
-</details>
-</div>
-<div class="cell" data-execution_count="6">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preparing the balanced dataset</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>train_data, train_labels <span class="op">=</span> balance_dataset(original_train_data, original_train_labels, <span class="dv">800</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>test_data, test_labels <span class="op">=</span> balance_dataset(original_test_data, original_test_labels, <span class="dv">200</span>)</span></code></pre></div>
-</details>
-</div>
-<p>Let’s examine the distribution of our dataset</p>
-<div class="cell" data-execution_count="7">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the number of images of each digit in the training and test datasets</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>train_digits, train_counts <span class="op">=</span> np.unique(train_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Training set distribution:"</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(train_digits, train_counts)), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>test_digits, test_counts <span class="op">=</span> np.unique(test_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Test set distribution:"</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(test_digits, test_counts)))  </span></code></pre></div>
-</details>
-</div>
-<pre><code>Training set distribution:
-{0: 800, 1: 800, 2: 800, 3: 800, 4: 800, 5: 800, 6: 800, 7: 800, 8: 800, 9: 800}
-
-Test set distribution:
-{0: 200, 1: 200, 2: 200, 3: 200, 4: 200, 5: 200, 6: 200, 7: 200, 8: 200, 9: 200}</code></pre>
-<p>So in summary, we have prepared the following dataset:</p>
-<ul>
-<li>A training set comprising 8000 images, 800 per label, and</li>
-<li>A test set consisting of 2000 images, 200 per label</li>
-</ul>
-<p>Now, let’s also look at the dimensions and number of labels of our new dataset</p>
-<div class="cell" data-execution_count="8">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Print out the dimensions and labels of the dataset we prepared</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Training dataset dimensions: "</span>, np.shape(train_data))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of training labels: "</span>, <span class="bu">len</span>(train_labels), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Testing dataset dimensions: "</span>, np.shape(test_data))</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of testing labels: "</span>, <span class="bu">len</span>(test_labels))</span></code></pre></div>
-</details>
-</div>
-<pre><code>Training dataset dimensions:  (8000, 784)
-Number of training labels:  8000
-
-Testing dataset dimensions:  (2000, 784)
-Number of testing labels:  2000</code></pre>
-<p>Each data point, i.e., a handwritten digit image in the dataset, is composed of 784 pixels and is stored as a vector with 784 coordinates/dimensions, where each coordinate has a numeric value ranging from 0 to 255. Let’s look at these numeric values by examining one of the images, say, the first image, in the dataset.</p>
-<div class="cell" data-execution_count="9">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print out the the first data point in training data</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>train_data[<span class="dv">0</span>]</span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>original_train_data[<span class="dv">0</span>]</span></code></pre></div>
 </details>
 </div>
 <pre><code>array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -471,56 +387,56 @@ Number of testing labels:  2000</code></pre>
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   3.,  18.,
+        18.,  18., 126., 136., 175.,  26., 166., 255., 247., 127.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0., 116., 245., 244.,   0.,   0.,   0.,   0.,   0.,   0.,
+        30.,  36.,  94., 154., 170., 253., 253., 253., 253., 253., 225.,
+       172., 253., 242., 195.,  64.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,  49., 238., 253., 253., 253., 253.,
+       253., 253., 253., 253., 251.,  93.,  82.,  82.,  56.,  39.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,  48., 239., 254., 226.,
+        18., 219., 253., 253., 253., 253., 253., 198., 182., 247., 241.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,  80., 156., 107., 253.,
+       253., 205.,  11.,   0.,  43., 154.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,  14.,   1., 154., 253.,  90.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0., 103., 254., 254.,  99.,   0.,   0.,   0.,   0.,   0.,
+       139., 253., 190.,   2.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,  17., 212., 254., 170.,
+         0.,   0.,   0.,   0.,   0.,   0.,  11., 190., 253.,  70.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,  35., 241., 225., 160., 108.,   1.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  81., 240.,
+       253., 253., 119.,  25.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,  45., 186., 253., 253., 150.,  27.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,  16.,  93., 252., 253., 187.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 249., 253.,
+       249.,  64.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,  46., 130., 183., 253., 253., 207.,   2.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,  39., 148., 229., 253., 253., 253.,
+       250., 182.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  24., 114.,
+       221., 253., 253., 253., 253., 201.,  78.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,  23.,  66., 213., 253., 253., 253., 253., 198.,  81.,
          2.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,  18., 171., 219., 253., 253.,
+       253., 253., 195.,  80.,   9.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  55.,
+       172., 226., 253., 253., 253., 253., 244., 133.,  11.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,  60., 254., 254., 141.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 110., 254., 254.,
-       141.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0., 178., 254., 254.,  28.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  24., 221., 254.,
-       201.,  10.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,  42., 254., 254.,  85.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0., 126., 255.,
-       254.,  41.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0., 160., 254., 254.,  41.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  21., 240.,
-       255., 226.,  26.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,  77., 254., 254., 177.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1., 148.,
-       254., 224.,  31.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   6., 254., 254., 195.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,  29.,
-       254., 254., 195.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0., 126., 254., 254., 110.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-       164., 254., 241.,  52.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0., 244., 254., 165.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
-         0., 188., 254.,  95.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+         0.,   0.,   0.,   0.,   0., 136., 253., 253., 253., 212., 135.,
+       132.,  16.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -530,61 +446,146 @@ Number of testing labels:  2000</code></pre>
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
          0.,   0.,   0.], dtype=float32)</code></pre>
+<div class="cell" data-execution_count="6">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the number of images of each digit in the training and test datasets</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>train_digits, train_counts <span class="op">=</span> np.unique(original_train_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Training set distribution:"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(train_digits, train_counts)), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>test_digits, test_counts <span class="op">=</span> np.unique(original_test_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Test set distribution:"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(test_digits, test_counts)))  </span></code></pre></div>
+</details>
+</div>
+<pre><code>Training set distribution:
+{0: 5923, 1: 6742, 2: 5958, 3: 6131, 4: 5842, 5: 5421, 6: 5918, 7: 6265, 8: 5851, 9: 5949}
+
+Test set distribution:
+{0: 980, 1: 1135, 2: 1032, 3: 1010, 4: 982, 5: 892, 6: 958, 7: 1028, 8: 974, 9: 1009}</code></pre>
+<p>We can also see that our dataset is <strong>imbalanced</strong>. Now, let’s visualize some random images from the dataset.</p>
+<div class="cell" data-execution_count="7">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the data to be in the form of 28x28 images</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>X_train_images <span class="op">=</span> original_train_data.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select 16 random images to display</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>random_indices <span class="op">=</span> np.random.choice(X_train_images.shape[<span class="dv">0</span>], <span class="dv">16</span>, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>random_images <span class="op">=</span> X_train_images[random_indices]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>random_labels <span class="op">=</span> original_train_labels[random_indices]  <span class="co"># Corresponding labels</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes.flat):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot each image on a subplot</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    ax.imshow(random_images[i], cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"Label: </span><span class="sc">{</span>random_labels[i]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">'off'</span>) </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+</details>
+</div>
+<p><img src="output_13_0.png" class="img-fluid"></p>
 </section>
-<section id="visualize-the-data" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Visualize the data</h1>
-<p>To visualize a data point, we need to first reshape the 784-dimensional vector into a 28x28 image. For that purpose, we will define a function, <code>vis_image()</code>, which in turn uses the <code>show_digit()</code> function to display the image of the digit given as input.</p>
+<section id="prepare-a-balanced-dataset-from-the-original-dataset" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="prepare-a-balanced-dataset-from-the-original-dataset"><span class="header-section-number">1.2</span> Prepare a balanced dataset from the original dataset</h2>
+<p>Now that we have explored our original dataset, let’s prepare a balanced dataset from it that contains 8000 samples for the training set and 2000 samples for the test set. Balanced dataset means samples are uniformly distributed across all labels (0 to 9) in both the sets. We define a function <code>balance_dataset</code> to carry out this task.</p>
+<div class="cell" data-execution_count="8">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> balance_dataset(original_data, original_labels, samples_per_label):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> []</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> []</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iterate over each class label (here 0 to 9)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> class_label <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(np.unique(original_labels))):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Find indices where the label equals the current class label</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> np.where(original_labels <span class="op">==</span> class_label)[<span class="dv">0</span>]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sample 'samples_per_class' indices uniformly from the current label</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        sampled_indices <span class="op">=</span> np.random.choice(indices, size<span class="op">=</span>samples_per_label, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Append the sampled data and labels to the balanced dataset</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        balanced_data.append(original_data[sampled_indices])</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        balanced_labels.append(original_labels[sampled_indices])</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Concatenate the lists of arrays into single arrays</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> np.concatenate(balanced_data, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> np.concatenate(balanced_labels, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the balanced dataset</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    shuffle_indices <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(balanced_data))</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    balanced_data <span class="op">=</span> balanced_data[shuffle_indices]</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    balanced_labels <span class="op">=</span> balanced_labels[shuffle_indices]</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> balanced_data, balanced_labels</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="9">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preparing the balanced training and testing dataset</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>train_data, train_labels <span class="op">=</span> balance_dataset(original_train_data, original_train_labels, <span class="dv">800</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>test_data, test_labels <span class="op">=</span> balance_dataset(original_test_data, original_test_labels, <span class="dv">200</span>)</span></code></pre></div>
+</details>
+</div>
+<p>Now, let’s also explore our balanced dataset.</p>
 <div class="cell" data-execution_count="10">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function that displays a digit given its vector representation</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_digit(x):</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">'off'</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    plt.imshow(x.reshape((<span class="dv">28</span>,<span class="dv">28</span>)), cmap<span class="op">=</span>plt.cm.gray)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function that takes an index of particular data set ("train" or "test") and displays that image.</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vis_image(index, dataset<span class="op">=</span><span class="st">"train"</span>):</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(dataset<span class="op">==</span><span class="st">"train"</span>): </span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        show_digit(train_data[index])</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> train_labels[index]</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        show_digit(test_data[index])</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> test_labels[index]</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t\t</span><span class="st">    Label "</span> <span class="op">+</span> <span class="bu">str</span>(label))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the number of images of each digit in the training and test datasets</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>train_digits, train_counts <span class="op">=</span> np.unique(train_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Training set distribution:"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(train_digits, train_counts)), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>test_digits, test_counts <span class="op">=</span> np.unique(test_labels, return_counts<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Test set distribution:"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">dict</span>(<span class="bu">zip</span>(test_digits, test_counts)), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)  </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out the shape and no. of labels of the balanced dataset</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of the training dataset: "</span>, np.shape(train_data))</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of training labels: "</span>, <span class="bu">len</span>(train_labels), end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of the testing dataset: "</span>, np.shape(test_data))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of testing labels: "</span>, <span class="bu">len</span>(test_labels))</span></code></pre></div>
 </details>
 </div>
-<section id="view-the-first-data-point-in-the-training-and-test-sets" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="view-the-first-data-point-in-the-training-and-test-sets"><span class="header-section-number">4.1</span> View the first data point in the training and test sets</h2>
-<p>Now that we have defined a function for visualizing the image, let’s see it in action by applying it to the first data points of the dataset.</p>
-<div class="cell" data-execution_count="11">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View the first data point in the training set</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>vis_image(<span class="dv">0</span>, <span class="st">"train"</span>)</span></code></pre></div>
-</details>
-</div>
-<p><img src="output_25_0.png" class="img-fluid"></p>
-<pre><code>            Label 1</code></pre>
-<div class="cell" data-execution_count="12">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now view the first data point in the test set</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>vis_image(<span class="dv">0</span>, <span class="st">"test"</span>)</span></code></pre></div>
-</details>
-</div>
-<p><img src="output_26_0.png" class="img-fluid"></p>
-<pre><code>            Label 5</code></pre>
+<pre><code>Training set distribution:
+{0: 800, 1: 800, 2: 800, 3: 800, 4: 800, 5: 800, 6: 800, 7: 800, 8: 800, 9: 800}
+
+Test set distribution:
+{0: 200, 1: 200, 2: 200, 3: 200, 4: 200, 5: 200, 6: 200, 7: 200, 8: 200, 9: 200}
+
+Shape of the training dataset:  (8000, 784)
+Number of training labels:  8000
+
+Shape of the testing dataset:  (2000, 784)
+Number of testing labels:  2000</code></pre>
+<p>So in summary, we have prepared the following balanced dataset:</p>
+<ul>
+<li>A training set comprising 8000 images, 800 per label, and</li>
+<li>A test set consisting of 2000 images, 200 per label</li>
+</ul>
 </section>
 </section>
-<section id="compute-squared-euclidean-distance" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Compute squared Euclidean distance</h1>
-<p>To compute nearest neighbor in our dataset, we first need to be able to compute distances between data points (i.e., images in this case), and the most common or default distance function is perhaps just Euclidean distance.</p>
+<section id="baseline-nearest-neighbornn-model" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Baseline nearest neighbor(NN) model</h1>
+<p>Now that we have our data ready, let’s first look at how we can compute the nearest neighbors.</p>
+<section id="squared-euclidean-distance" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="squared-euclidean-distance"><span class="header-section-number">2.1</span> Squared Euclidean distance</h2>
+<p>To compute nearest neighbor in our dataset, we first need to be able to compute distances between data points (i.e., images in this case). For this, we will use the most common distance function Euclidean distance.</p>
 <p>If x is the vector representing an image and y is the corresponding label, then:</p>
 <ul>
 <li>Data space: <span class="math inline">\(x \in \mathbb{R}^{784}\)</span>, a 784-dimensional vector consisting of numeric values ranging from 0 to 255.</li>
@@ -593,186 +594,210 @@ Number of testing labels:  2000</code></pre>
 <p>Since we have 784-dimensional vectors to work with, the Euclidean distance between two 784-dimensional vectors, say <span class="math inline">\(x, z \in \mathbb{R}^{784}\)</span>, is:</p>
 <p><span class="math display">\[\|x - z\| = \sqrt{\sum_{i=1}^{784} (x_i - z_i)^2}\]</span></p>
 <p>where <span class="math inline">\(x_i\)</span> and <span class="math inline">\(z_i\)</span> represent the <span class="math inline">\(i^{th}\)</span> coordinates of x and z, respectively.</p>
-<p>For easier computation, we often omit the square root and simply compute <em>squared Euclidean distance</em>:</p>
+<p>For easier computation, we often omit the square root and simply compute <code>Squared Euclidean distance</code>:</p>
 <p><span class="math display">\[\|x - z\|^2 = \sum_{i=1}^{784} (x_i - z_i)^2\]</span></p>
 <p>The following <code>squared_dist</code> function computes the squared Euclidean distance between two vectors.</p>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="11">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Computes squared Euclidean distance between two vectors.</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> squared_dist(x,z):</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(np.square(x<span class="op">-</span>z))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Computes squared Euclidean distance between two vectors.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> squared_dist(x,z):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.<span class="bu">sum</span>(np.square(x<span class="op">-</span>z))</span></code></pre></div>
 </details>
 </div>
-<section id="test-the-euclidean-distance-function" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="test-the-euclidean-distance-function"><span class="header-section-number">5.1</span> Test the Euclidean distance function</h2>
-<p>let’s compute Euclidean distances of some random digits to see the <code>squared_dist</code> function in action before we use it in the NN classifier.</p>
-<div class="cell" data-execution_count="14">
+<section id="test-the-euclidean-distance-function" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="test-the-euclidean-distance-function"><span class="header-section-number">2.1.1</span> Test the Euclidean distance function</h3>
+<p>Let’s compute Euclidean distances of some random digits to see the <code>squared_dist</code> function in action before we use it in the NN classifier.</p>
+<div class="cell" data-execution_count="12">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Examples:</span><span class="ch">\n</span><span class="st">'</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Computing distances between random digits in our training set.</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">5</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">5</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">7</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">7</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Examples:</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Computing distances between random digits in our training set.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">5</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">5</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">1</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Distance from digit </span><span class="sc">{</span>train_labels[<span class="dv">3</span>]<span class="sc">}</span><span class="ss"> to digit </span><span class="sc">{</span>train_labels[<span class="dv">7</span>]<span class="sc">}</span><span class="ss"> in our training set: </span><span class="sc">{</span>squared_dist(train_data[<span class="dv">4</span>],train_data[<span class="dv">7</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div>
 </details>
 </div>
 <pre><code>Examples:
 
-Distance from digit 1 to digit 7 in our training set: 6720216.0
-Distance from digit 1 to digit 2 in our training set: 12104963.0
-Distance from digit 1 to digit 3 in our training set: 9038792.0</code></pre>
+Distance from digit 8 to digit 9 in our training set: 5624921.0
+Distance from digit 8 to digit 4 in our training set: 5024177.0
+Distance from digit 8 to digit 1 in our training set: 3521175.0</code></pre>
 </section>
 </section>
-<section id="build-nearest-neighbornn-classifier" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Build nearest neighbor(NN) classifier</h1>
+</section>
+<section id="build-the-baseline-nn-classifier" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Build the baseline NN classifier</h1>
 <p>Now that we have a distance function defined, we can turn to nearest neighbor classification.</p>
 <p>In a nearest neighbor classification approach, for each test image in the test dataset, the classifier searches through the entire training set to find the nearest neighbor. This is done by computing the squared Euclidean distance between the feature vectors (in this case, the pixel values of the images) of the test image and all images in the training set. The image in the training set with the smallest Euclidean distance becomes the nearest neighbor to the test image, and the label of this nearest neighbor is assigned to the test image. This process is repeated for each test image, resulting in a classification for the entire test dataset based on the labels of their nearest neighbors in the training set.</p>
-<p>we define the functions <code>find_NN()</code> and <code>NN_classifier()</code> to find the nearest neighbour image for a given image <code>x</code>, i.e., the image that has least squared Euclidean distance, and then returns its label. The returned label is what the given image <code>x</code> could represent.</p>
+<p>we define the function <code>NN_classifier()</code> to find the nearest neighbour image for a given image <code>x</code>, i.e., the image that has least squared Euclidean distance, and then returns its label. The returned label is what the given image <code>x</code> could represent.</p>
+<div class="cell" data-execution_count="13">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Takes a vector x and returns the class of its nearest neighbor in train_data</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NN_classifier(x):</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute distances between given image x and every image in train_data   </span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    distances <span class="op">=</span> [squared_dist(x, train_data[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(train_labels))]</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the index of the image that resulted in smallest distance</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> np.argmin(distances)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_labels[index]</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="test-the-baseline-nn-classifier" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Test the baseline NN classifier</h1>
+<p>Let’s apply our nearest neighbor classifier to the full test dataset.<br></p>
+<div class="cell" data-execution_count="14">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on each test data point and time it!</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="op">=</span> [NN_classifier(test_data[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(test_labels))]</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span></code></pre></div>
+</details>
+</div>
+<section id="classification-time-of-baseline-nn" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="classification-time-of-baseline-nn"><span class="header-section-number">4.1</span> Classification time of baseline NN</h2>
+<p>Since the nearest neighbor classifier goes through the entire training set of 8000 images, searching for the nearest neighbor image for every single test image in the dataset of 2000 images, we should not expect testing to be very fast.</p>
 <div class="cell" data-execution_count="15">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Takes a vector x and returns the index of its nearest neighbor in train_data</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_NN(x):</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute distances from x to every row in train_data</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    distances <span class="op">=</span> [squared_dist(x, train_data[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(train_labels))]</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the index of the smallest distance</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.argmin(distances)</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Takes a vector x and returns the class of its nearest neighbor in train_data</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NN_classifier(x):</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the index of the the nearest neighbor</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> find_NN(x)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Return its class</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_labels[index]</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the classification time of NN classifier</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Classification time of NN classifier: </span><span class="sc">{</span><span class="bu">round</span>(t_after <span class="op">-</span> t_before, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span></code></pre></div>
 </details>
 </div>
+<pre><code>Classification time of NN classifier: 57.33 sec</code></pre>
 </section>
-<section id="test-the-nn-classifier" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Test the NN classifier</h1>
-<p>Let’s apply our nearest neighbor classifier to the full test dataset.<br></p>
+<section id="error-rate-of-baseline-nn" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="error-rate-of-baseline-nn"><span class="header-section-number">4.2</span> Error rate of baseline NN</h2>
 <div class="cell" data-execution_count="16">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on each test data point and time it!</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="op">=</span> [NN_classifier(test_data[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(test_labels))]</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span></code></pre></div>
-</details>
-</div>
-<section id="compute-the-classification-time-of-nn" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="compute-the-classification-time-of-nn"><span class="header-section-number">7.1</span> Compute the classification time of NN</h2>
-<p>Since the nearest neighbor classifier goes through the entire training set of 8000 images, searching for the nearest neighbor image for every single test image in the dataset of 2000 images, we should not expect testing to be very fast.</p>
-<div class="cell" data-execution_count="17">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the classification time of NN classifier</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Classification time of NN classifier: </span><span class="sc">{</span><span class="bu">round</span>(t_after <span class="op">-</span> t_before, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span></code></pre></div>
-</details>
-</div>
-<pre><code>Classification time of NN classifier: 227.05 sec</code></pre>
-</section>
-<section id="compute-the-error-rate-of-nn" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="compute-the-error-rate-of-nn"><span class="header-section-number">7.2</span> Compute the error rate of NN</h2>
-<div class="cell" data-execution_count="18">
-<details open="">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the error rate </span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>err_positions <span class="op">=</span> np.not_equal(test_predictions, test_labels)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> <span class="bu">float</span>(np.<span class="bu">sum</span>(err_positions))<span class="op">/</span><span class="bu">len</span>(test_labels)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Error rate of nearest neighbor classifier: </span><span class="sc">{</span><span class="bu">round</span>(error <span class="op">*</span> <span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the error rate </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>err_positions <span class="op">=</span> np.not_equal(test_predictions, test_labels)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> <span class="bu">float</span>(np.<span class="bu">sum</span>(err_positions))<span class="op">/</span><span class="bu">len</span>(test_labels)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Error rate of nearest neighbor classifier: </span><span class="sc">{</span><span class="bu">round</span>(error <span class="op">*</span> <span class="dv">100</span>, <span class="dv">2</span>)<span class="sc">}</span><span class="ss">%"</span>)</span></code></pre></div>
 </details>
 </div>
 <pre><code>Error rate of nearest neighbor classifier: 5.45%</code></pre>
-<p>The error rate of the NN classifier is 5.45%. This means that out of the 2000 points, NN misclassifies around 109 of them, which is not too bad for such a simple method.</p>
+<p>The error rate of the NN classifier is 5.45%.</p>
+<p>This means that out of the 2000 points, NN misclassifies around 109 of them, which is not too bad for such a simple method.</p>
 </section>
 </section>
-<section id="improve-nearest-neighbors" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Improve nearest neighbors</h1>
-<p>NN classifier can be improved in two aspects:</p>
-<ul>
-<li><p>Decreasing the error rate</p></li>
-<li><p>Decreasing the classification time</p>
-<pre><code>  Decreasing the error rate</code></pre></li>
-</ul>
-<p>The error rate can be decreased in two ways: by using k-Nearest Neighbors and by employing better distance functions.</p>
-<ol type="i">
-<li>k-Nearest neighbors</li>
-</ol>
-<p>Instead of finding 1 nearest neighbor and returning its label, as we have done in this project, we can find k nearest neighbors and return the majority label, where the optimum value for k is found by cross-validation technique.</p>
-<ol start="2" type="i">
-<li>Better distance functions</li>
-</ol>
-<p>Euclidean distance is affected by image deformation. Using better distance functions, such as shape context and tangent distance, which are invariant to deformations, could drastically reduce the error rate.</p>
-<pre><code>    Decreasing the classification time</code></pre>
-<p>In this project, we will focus on decreasing the classification time. We have seen that the brute-force search technique for the nearest neighbor is quite effective, but this method can be computationally expensive, especially with large datasets. If there are <span class="math inline">\(N\)</span> training points in <span class="math inline">\(\mathbb{R}^d\)</span>, this approach scales as <span class="math inline">\(O(N d)\)</span> time. That means the brute-force approach quickly becomes infeasible as the number of training points <span class="math inline">\(N\)</span> grows.</p>
-<p>Fortunately, faster methods exist to perform nearest neighbor searches if we are willing to spend some time preprocessing the training set to create data structures that will optimize the search. These data structures have names like locality sensitive hashing, ball trees, k-d trees etc.</p>
-<p>Here, we look at one of these algorithms, namely, k-d tree and implement it using scikit-learn library.</p>
-<section id="k-d-tree-algorithm" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="k-d-tree-algorithm"><span class="header-section-number">8.1</span> k-d tree algorithm</h2>
-<p>The key advantage of the k-d tree is its ability to significantly reduce the number of distance calculations needed during a nearest neighbor search by efficiently pruning regions of the search space. This algorithm is based on the triangle inequality, utilizing the fact that if point ‘a’ is significantly far from point ‘b,’ and point ‘b’ is in close proximity to point ‘c,’ we can infer that points ‘a’ and ‘c’ are also distant from each other without explicitly calculating their distance.</p>
-<p>This way, the computational cost of a nearest neighbors search can be reduced to <span class="math inline">\(O(dNlog(N))\)</span> or better.</p>
+<section id="k-d-tree-nearest-neighbor" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> k-d tree nearest neighbor</h1>
+<p>We have seen that our baseline model performs well and the brute-force search technique for the nearest neighbor is quite effective, but this method can be computationally expensive, especially with large datasets. If there are <span class="math inline">\(N\)</span> training points in <span class="math inline">\(\mathbb{R}^d\)</span>, this approach scales as <span class="math inline">\(O(N d)\)</span> time. That means the brute-force approach quickly becomes infeasible as the number of training points 𝑁 grows.</p>
+<p>There are algorithms such as locality sensitive hashing, ball trees, k-d trees to optimize the nearest neighbor search by creating data structures on our data. In this project, we will explore k-d tree algorithm.</p>
+<section id="k-d-tree-algorithm" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="k-d-tree-algorithm"><span class="header-section-number">5.1</span> k-d tree algorithm</h2>
+<p>A k-d tree (k-dimensional tree) is a data structure used to organize points in a k-dimensional space. First, the k-d tree is built by recursively partitioning the data into two halves along one of the k dimensions. Next, during a nearest neighbor search, the algorithm uses the triangle inequality to determine whether it can prune certain branches of the tree (i.e., avoid searching certain subspaces). This allows the k-d tree to avoid unnecessary calculations, improving search efficiency thereby decreasing the classification time.</p>
+<p>Here, we will use scikit-learn library to implement our k-d tree.</p>
+<div class="cell" data-execution_count="17">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Build nearest neighbor structure on training data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>kd_tree <span class="op">=</span> KDTree(train_data)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute training time</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>t_training <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken to build the data structure: </span><span class="sc">{</span><span class="bu">round</span>(t_training, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Get nearest neighbor predictions on testing data</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>test_neighbors <span class="op">=</span> np.squeeze(kd_tree.query(test_data, k<span class="op">=</span><span class="dv">1</span>, return_distance<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>kd_tree_predictions <span class="op">=</span> train_labels[test_neighbors]</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute testing time</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>t_testing <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time taken to classify test set: </span><span class="sc">{</span><span class="bu">round</span>(t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co">## total classification time</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall classification time of k-d tree algorithm: </span><span class="sc">{</span><span class="bu">round</span>(t_training <span class="op">+</span> t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>Time taken to build the data structure: 0.58 sec
+Time taken to classify test set: 10.27 sec
+
+Overall classification time of k-d tree algorithm: 10.85 sec</code></pre>
+<p>So, the k-d tree has drastically reduced our classification time. It took just 10.27 seconds to classify the entire test set while taking only around 0.5 second to build the tree data structure. Therefore, the overall classification time is approximately 11 seconds.</p>
+<p>Remember, the k-d tree algorithm only speeds up the nearest neighbor search; it does not affect the prediction process itself. The predictions of our baseline NN classifier will be the same as those of the k-d tree NN classifier. Let’s test this.</p>
+<div class="cell" data-execution_count="18">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Verify that the both predictions of baseline NN and k-d tree NN are the same</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Does k-d tree produce same predictions as NN classifier? "</span>, np.array_equal(test_predictions, kd_tree_predictions))</span></code></pre></div>
+</details>
+</div>
+<pre><code>Does k-d tree produce same predictions as NN classifier?  True</code></pre>
+</section>
+<section id="k-d-tree-on-the-full-mnist-dataset" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="k-d-tree-on-the-full-mnist-dataset"><span class="header-section-number">5.2</span> k-d tree on the full MNIST dataset</h2>
+<p>Now let’s also look at how our k-d tree algorithm works on the original dataset i.e.&nbsp;dataset with 60,000 training images and 10,000 testing images.</p>
 <div class="cell" data-execution_count="19">
 <details open="">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build nearest neighbor structure on training data</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>kd_tree <span class="op">=</span> KDTree(train_data)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute training time</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>t_training <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time to build data structure: </span><span class="sc">{</span><span class="bu">round</span>(t_training, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Get nearest neighbor predictions on testing data</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>test_neighbors <span class="op">=</span> np.squeeze(kd_tree.query(test_data, k<span class="op">=</span><span class="dv">1</span>, return_distance<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>kd_tree_predictions <span class="op">=</span> train_labels[test_neighbors]</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute testing time</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>t_testing <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time to classify test set: </span><span class="sc">{</span><span class="bu">round</span>(t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co">## total classification time</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall classification time of k-d tree algorithm: </span><span class="sc">{</span><span class="bu">round</span>(t_training<span class="op">+</span>t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="co">## Verify that the predictions are the same</span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Does k-d tree produce same predictions as NN classifier? "</span>, np.array_equal(test_predictions, kd_tree_predictions))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>kd_tree <span class="op">=</span> KDTree(original_train_data)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute training time</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>t_training <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time to build data structure: </span><span class="sc">{</span><span class="bu">round</span>(t_training, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">## Get nearest neighbor predictions on testing data</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>t_before <span class="op">=</span> time.time()</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>test_neighbors <span class="op">=</span> np.squeeze(kd_tree.query(original_test_data, k<span class="op">=</span><span class="dv">1</span>, return_distance<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>kd_tree_predictions <span class="op">=</span> original_train_labels[test_neighbors]</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>t_after <span class="op">=</span> time.time()</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co">## Compute testing time</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>t_testing <span class="op">=</span> t_after <span class="op">-</span> t_before</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Time to classify test set: </span><span class="sc">{</span><span class="bu">round</span>(t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>, end <span class="op">=</span> <span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co">## total classification time</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall classification time of k-d tree algorithm: </span><span class="sc">{</span><span class="bu">round</span>(t_training<span class="op">+</span>t_testing, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> sec"</span>)</span></code></pre></div>
 </details>
 </div>
-<pre><code>Time to build data structure: 0.99 sec
-Time to classify test set: 20.35 sec
+<pre><code>---------------------------------------------------------------------------
 
-Overall classification time of k-d tree algorithm: 21.34 sec
-Does k-d tree produce same predictions as NN classifier?  True</code></pre>
-<p>We can see that the baseline nearest neighbor model and the k-d tree algorithm produce the same predictions, but the key difference is that the k-d tree is significantly faster than the former. It just took 21.34 sec to classify the whole test set.</p>
+KeyboardInterrupt                         Traceback (most recent call last)
+
+KeyboardInterrupt: </code></pre>
+<p>The above code is taking forever so i have terminated it.</p>
 </section>
 </section>
-<section id="conclusion" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Conclusion</h1>
-<p>We have found that our nearest neighbor (NN) classifier has delivered reasonably good performance, despite employing a brute-force search approach and using a basic distance measure such as Euclidean distance. We have also seen how the k-d tree algorithm can be used to speed up the search process, thereby making it feasible for the nearest neighbor classifier to be applied to larger datasets.</p>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
+<p>Although, k-d tree nearest neighbor worked well for smaller dataset it completely failed when the dataset grew bigger.</p>
+<p>This could be due to the following reasons:</p>
+<ul>
+<li><p>When we are working with smaller dataset i.e with only 8,000 training images, the tree structure built is relatively shallow and the number of points to compare during a nearest neighbor search is much smaller. This makes the algorithm’s computational load manageable. Whereas with the full dataset, the depth of the k-d tree increases which leads to more nodes. This results in an drastic increase in the time complexity of searches as the search frequently requires backtracking to different nodes and exploring other branches of the tree to find the nearest neighbor.</p></li>
+<li><p>With more data points, the k-d tree requires more memory to store the nodes, which can lead to significant overhead. This increased memory usage can cause slower performance, it must be also noted that we are running the model on a 1.70 GHz Intel Core i7 (16GB RAM) laptop, which has limited computing power.</p></li>
+</ul>
+<p>From the above observations, we can conclude that k-d trees can only be useful for specific tasks, especially in small or moderately-sized datasets or when a very simple model is sufficient.</p>
+<p>Another thing to be noted here is the accuracy of k-d tree nearest neighbor or baseline NN depends on the quality of the data and the distance metric used. Here we used Euclidean distance which is affected by deformations in the image. But since our quality of the data is good, we did not face any such issues.</p>
+<p>So in all practical cases especially when dealing with large, high-dimensional image datasets, more efficient methods like Convolutional Neural Networks (CNNs) are typically used as they are designed to handle high-dimensional data like images and generalize better because they learn from the data, rather than just memorizing it.</p>
 
 
 </section>

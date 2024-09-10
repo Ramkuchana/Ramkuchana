@@ -20,9 +20,9 @@ about:
     - icon: linkedin
       text: Linkedin
       href: https://www.linkedin.com/in/ramkuchana/
-#    - icon: github
-#      text: GitHub
-#      href: https://github.com      
+    - icon: github
+      text: GitHub
+      href: https://github.com/Ramkuchana      
     - icon: envelope
       text: Email
       href: mailto:rams9795@gmail.com
