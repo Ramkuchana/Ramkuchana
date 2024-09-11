@@ -2,7 +2,7 @@
 
 I’m Ram!
 
-I primarily post my projects on my website [on my website](https://ramkuchana.github.io/Ramkuchana/)
+I primarily post my projects [on my website](https://ramkuchana.github.io/Ramkuchana/) . Please do give a visit.
 <!--
 **Ramkuchana/Ramkuchana** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
