@@ -1,0 +1,4 @@
+- title: Few-Shot Text Classification using SetFit Framework
+  path: projects/setfitFewshot/setfitFewshot.qmd
+  image: projects/setfitFewshot/samplesetfitFewshot.png
+  categories: [setfit, datasets, Python, All]

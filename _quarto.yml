@@ -36,7 +36,7 @@ website:
     left:
    
       - text: "Projects"
-        file: projects/Bert/bertmodel.qmd
+        file: projects/finetuningBert/finetuningBert.qmd
 
 
         
@@ -72,6 +72,8 @@ website:
       contents:
         - section: "ML Projects"
           contents:
+            - projects/finetuningBert/finetuningBert.qmd
+            - projects/setfitFewshot/setfitFewshot.qmd
             - projects/Bert/bertmodel.qmd
             - projects/BnMclass/binaryNmulti.qmd
             - projects/FashionMNIST/fashionMNIST.qmd

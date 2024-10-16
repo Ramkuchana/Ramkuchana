@@ -38,6 +38,8 @@ listing:
     type: grid
     categories: cloud
     contents:
+      - projects/finetuningBert/finetuningBert.yaml
+      - projects/setfitFewshot/setfitFewshot.yaml
       - projects/Bert/bertmodel.yaml
       - projects/BnMclass/binaryNmulti.yaml
       - projects/FashionMNIST/fashionMNIST.yaml

@@ -1,0 +1,4 @@
+- title: Fine tuning a Representation Model for Binary Sentiment Classification
+  path: projects/finetuningBert/finetuningBert.qmd
+  image: projects/finetuningBert/samplefinetuningBert.png
+  categories: [Transformers, datasets, Python, All]

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Few-Shot Text Classification using SetFit Framework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../projects/Bert/bertmodel.html" rel="next">
+<link href="../../projects/finetuningBert/finetuningBert.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Home</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../projects/finetuningBert/finetuningBert.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+    <a href="https://www.linkedin.com/in/ramkuchana/" rel="" title="Linkedin" class="quarto-navigation-tool px-1" aria-label="Linkedin"><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:rams9795@gmail.com" rel="" title="Email" class="quarto-navigation-tool px-1" aria-label="Email"><i class="bi bi-envelope"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/finetuningBert/finetuningBert.html">ML Projects</a></li><li class="breadcrumb-item"><a href="../../projects/setfitFewshot/setfitFewshot.html">Few-Shot Text Classification using SetFit Framework</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">ML Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/finetuningBert/finetuningBert.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fine tuning a Representation Model for Binary Sentiment Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/setfitFewshot/setfitFewshot.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Few-Shot Text Classification using SetFit Framework</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/Bert/bertmodel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using a pre-trained BERT model for text prediction and analysing its self-attention scores</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/BnMclass/binaryNmulti.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Developing neural network models for classification problems using PyTorch</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/FashionMNIST/fashionMNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building neural network models to identify the type of clothing in images</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/MNIST/mnist.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Non-learning model for recognizing handwritten digit</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/NimGame/NimGame.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Training an AI to play a game using reinforcement learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/ParseTrees/ParsetreesNnounphrases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Generating parse trees and extracting noun phrases</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">SQL Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/SQLPackages/packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using SQL to find the missing packages in the mail delivery service’s database</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/SQLMuseum/mfa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Soft deletions, views, and triggers in the context of a museum’s database</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Tableau Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/Salesdashboard/salesdashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sales dashboard using Tableau</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#preparing-the-dataset-for-few-shot-learning" id="toc-preparing-the-dataset-for-few-shot-learning" class="nav-link active" data-scroll-target="#preparing-the-dataset-for-few-shot-learning"><span class="header-section-number">1</span> Preparing the dataset for few-shot learning</a>
+  <ul class="collapse">
+  <li><a href="#imdb-dataset" id="toc-imdb-dataset" class="nav-link" data-scroll-target="#imdb-dataset"><span class="header-section-number">1.1</span> IMDb dataset</a></li>
+  <li><a href="#few-shot-setting" id="toc-few-shot-setting" class="nav-link" data-scroll-target="#few-shot-setting"><span class="header-section-number">1.2</span> Few-shot setting</a></li>
+  </ul></li>
+  <li><a href="#few-shot-text-classification-using-setfit" id="toc-few-shot-text-classification-using-setfit" class="nav-link" data-scroll-target="#few-shot-text-classification-using-setfit"><span class="header-section-number">2</span> Few-Shot Text Classification using SetFit</a>
+  <ul class="collapse">
+  <li><a href="#training-the-model" id="toc-training-the-model" class="nav-link" data-scroll-target="#training-the-model"><span class="header-section-number">2.1</span> Training the model</a></li>
+  <li><a href="#evaluating-the-model" id="toc-evaluating-the-model" class="nav-link" data-scroll-target="#evaluating-the-model"><span class="header-section-number">2.2</span> Evaluating the model</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Few-Shot Text Classification using SetFit Framework</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This project uses the <code>SetFit</code> (Sentence Transformer Fine-Tuning) framework to perform few-shot text classification. Few-shot learning allows a model to learn well with very little labeled data, which is especially useful when collecting large datasets is difficult. In this project, we use the IMDb movie reviews dataset to classify reviews as positive or negative, aiming to train an effective model using only a small number of labeled examples for each class.</p>
+<p>SetFit combines the strengths of pre-trained sentence transformers with contrastive learning to fine-tune sentence embeddings for specific tasks. This makes it possible to learn efficiently from just a few examples. The framework fine-tunes the embeddings by using pairs of similar and different sentences, then trains a simple classifier on top of the embeddings for the classification task.</p>
+<p>We go through the following primary steps:</p>
+<ul>
+<li><p>Sampling a small number of examples per class (few-shot setting) from the original dataset and generating positive and negative pairs for contrastive learning.</p></li>
+<li><p>Fine-tuning a pre-trained sentence transformer model to adapt the embeddings for sentiment classification using the sampled data.</p></li>
+<li><p>Training a classifier on the fine-tuned embeddings to predict whether a movie review is positive or negative.</p></li>
+<li><p>Evaluating the model’s performance on the test data to measure its effectiveness in few-shot classification.</p></li>
+</ul>
+<section id="preparing-the-dataset-for-few-shot-learning" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Preparing the dataset for few-shot learning</h1>
+<section id="imdb-dataset" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="imdb-dataset"><span class="header-section-number">1.1</span> IMDb dataset</h2>
+<p>The IMDb dataset consists of movie reviews labeled as either positive or negative. The original dataset has balanced train and test datasets, each containing 25,000 labeled samples (reviews) and an additional 50,000 unlabeled samples for unsupervised learning.</p>
+<p>let’s load and explore the original IMDb dataset.</p>
+<div class="cell" data-execution_count="1">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset, concatenate_datasets</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the IMDb dataset</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>imdb_dataset <span class="op">=</span> load_dataset(<span class="st">"imdb"</span>)</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="2">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the imdb dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(imdb_dataset)</span></code></pre></div>
+</details>
+</div>
+<pre><code>DatasetDict({
+    train: Dataset({
+        features: ['text', 'label'],
+        num_rows: 25000
+    })
+    test: Dataset({
+        features: ['text', 'label'],
+        num_rows: 25000
+    })
+    unsupervised: Dataset({
+        features: ['text', 'label'],
+        num_rows: 50000
+    })
+})</code></pre>
+<div class="cell" data-execution_count="3">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspecting the dataset structure</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(imdb_dataset[<span class="st">"train"</span>].features)</span></code></pre></div>
+</details>
+</div>
+<pre><code>{'text': Value(dtype='string', id=None), 'label': ClassLabel(names=['neg', 'pos'], id=None)}</code></pre>
+<div class="cell" data-execution_count="4">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the first review to see what it looks like</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(imdb_dataset[<span class="st">"train"</span>][<span class="dv">0</span>][<span class="st">"text"</span>])</span></code></pre></div>
+</details>
+</div>
+<pre><code>I rented I AM CURIOUS-YELLOW from my video store because of all the controversy that surrounded it when it was first released in 1967. I also heard that at first it was seized by U.S. customs if it ever tried to enter this country, therefore being a fan of films considered "controversial" I really had to see this for myself.&lt;br /&gt;&lt;br /&gt;The plot is centered around a young Swedish drama student named Lena who wants to learn everything she can about life. In particular she wants to focus her attentions to making some sort of documentary on what the average Swede thought about certain political issues such as the Vietnam War and race issues in the United States. In between asking politicians and ordinary denizens of Stockholm about their opinions on politics, she has sex with her drama teacher, classmates, and married men.&lt;br /&gt;&lt;br /&gt;What kills me about I AM CURIOUS-YELLOW is that 40 years ago, this was considered pornographic. Really, the sex and nudity scenes are few and far between, even then it's not shot like some cheaply made porno. While my countrymen mind find it shocking, in reality sex and nudity are a major staple in Swedish cinema. Even Ingmar Bergman, arguably their answer to good old boy John Ford, had sex scenes in his films.&lt;br /&gt;&lt;br /&gt;I do commend the filmmakers for the fact that any sex shown in the film is shown for artistic purposes rather than just to shock people and make money to be shown in pornographic theaters in America. I AM CURIOUS-YELLOW is a good film for anyone wanting to study the meat and potatoes (no pun intended) of Swedish cinema. But really, this film doesn't have much of a plot.</code></pre>
+<div class="cell" data-execution_count="5">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the label of the first review</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(imdb_dataset[<span class="st">"train"</span>][<span class="dv">0</span>][<span class="st">"label"</span>])</span></code></pre></div>
+</details>
+</div>
+<pre><code>0</code></pre>
+</section>
+<section id="few-shot-setting" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="few-shot-setting"><span class="header-section-number">1.2</span> Few-shot setting</h2>
+<p>However, to simulate the few-shot setting, we will sample only 32 examples (16 positive, 16 negative) from the original dataset to demonstrate how the SetFit framework can effectively perform few-shot learning using contrastive learning.</p>
+<p>We also create a balanced test dataset with 2,000 examples from the original dataset to reduce the computational resources needed for evaluating the model.</p>
+<div class="cell" data-execution_count="6">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function to balance the dataset</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> balance_dataset(dataset, label_col, num_samples):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Filter positive and negative examples</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    positive_samples <span class="op">=</span> dataset.<span class="bu">filter</span>(<span class="kw">lambda</span> example: example[label_col] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    negative_samples <span class="op">=</span> dataset.<span class="bu">filter</span>(<span class="kw">lambda</span> example: example[label_col] <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Subsample both to the desired number</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    positive_samples <span class="op">=</span> positive_samples.shuffle(seed<span class="op">=</span><span class="dv">42</span>).select(<span class="bu">range</span>(num_samples <span class="op">//</span> <span class="dv">2</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    negative_samples <span class="op">=</span> negative_samples.shuffle(seed<span class="op">=</span><span class="dv">42</span>).select(<span class="bu">range</span>(num_samples <span class="op">//</span> <span class="dv">2</span>))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Concatenate positive and negative examples to form a balanced dataset</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    balanced_dataset <span class="op">=</span> concatenate_datasets([positive_samples, negative_samples]).shuffle(seed<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> balanced_dataset</span></code></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="7">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a balanced train and test dataset</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>train_data <span class="op">=</span> balance_dataset(imdb_dataset[<span class="st">"train"</span>], <span class="st">"label"</span>, <span class="dv">32</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>test_data <span class="op">=</span> balance_dataset(imdb_dataset[<span class="st">"test"</span>], <span class="st">"label"</span>, <span class="dv">2000</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the datasets</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"train_data:</span><span class="ch">\n</span><span class="ss"> </span><span class="sc">{</span>train_data<span class="sc">}</span><span class="ss">"</span>, end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"test_data:</span><span class="ch">\n</span><span class="ss"> </span><span class="sc">{</span>test_data<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div>
+</details>
+</div>
+<pre><code>train_data:
+ Dataset({
+    features: ['text', 'label'],
+    num_rows: 32
+})
+
+test_data:
+ Dataset({
+    features: ['text', 'label'],
+    num_rows: 2000
+})</code></pre>
+</section>
+</section>
+<section id="few-shot-text-classification-using-setfit" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Few-Shot Text Classification using SetFit</h1>
+<p>We use a pre-trained sentence transformer model <code>(all-mpnet-base-v2)</code> and fine-tune it using contrastive learning on a small balanced dataset we created. Contrastive learning helps the model better understand semantic similarities and differences between the reviews.</p>
+<p>After fine-tuning the embeddings, a lightweight classifier is trained to predict whether a given review is positive or negative.</p>
+<div class="cell" data-execution_count="8">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> setfit <span class="im">import</span> SetFitModel</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a pre-trained SentenceTransformer model</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SetFitModel.from_pretrained(<span class="st">"sentence-transformers/all-mpnet-base-v2"</span>)</span></code></pre></div>
+</details>
+</div>
+<p>when we load the sentence transformer model, by default, a logistic regression model is also chosen as classifier to train.</p>
+<div class="cell" data-execution_count="9">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.model_head)</span></code></pre></div>
+</details>
+</div>
+<pre><code>LogisticRegression()</code></pre>
+<section id="training-the-model" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="training-the-model"><span class="header-section-number">2.1</span> Training the model</h2>
+<div class="cell" data-execution_count="10">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> setfit <span class="im">import</span> TrainingArguments <span class="im">as</span> SetFitTrainingArguments</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> setfit <span class="im">import</span> Trainer <span class="im">as</span> SetFitTrainer</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define training arguments</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> SetFitTrainingArguments(</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    num_epochs<span class="op">=</span><span class="dv">3</span>, <span class="co"># The number of epochs to use for contrastive learning</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    num_iterations<span class="op">=</span><span class="dv">20</span>  <span class="co"># The number of text pairs to generate</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</details>
+</div>
+<p>The <code>SetFitTrainingArguments</code> class is used to specify how the model should be trained. It’s similar to training configurations in other frameworks like transformers.</p>
+<p><code>num_epochs=3</code>: This specifies that the training process will run for 3 epochs. One epoch means that the entire training dataset will pass through the model once.</p>
+<p><code>num_iterations=20</code>: This refers to the number of contrastive learning steps or the number of text pairs the model should learn from.</p>
+<p>Contrastive Learning is a self-supervised learning technique where the model learns to differentiate between similar and dissimilar pairs of inputs. It’s widely used to improve the quality of sentence embeddings.</p>
+<div class="cell" data-execution_count="11">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create trainer</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>trainer <span class="op">=</span> SetFitTrainer(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>args,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    train_dataset<span class="op">=</span>train_data,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    eval_dataset<span class="op">=</span>test_data,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    metric<span class="op">=</span><span class="st">"f1"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</details>
+</div>
+<p>The <code>SetFitTrainer</code> is the main class responsible for orchestrating the training process. It takes care of the training loop, optimization, and evaluation.</p>
+<div class="cell" data-execution_count="12">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Training loop</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>trainer.train()</span></code></pre></div>
+</details>
+</div>
+<pre><code>***** Running training *****
+  Num unique pairs = 1280
+  Batch size = 16
+  Num epochs = 3</code></pre>
+<p><img src="samplesetfitFewshot.png" class="img-fluid"></p>
+<p><code>trainer.train()</code> triggers the training loop where the model will learn from the sampled training data (16 examples per class) for 3 epochs, applying contrastive learning over 20 iterations per batch.</p>
+<p>Notice that output mentions that 1,280 sentence pairs were generated from the 32 samples (16 positive and 16 negative)we provided for fine-tuning the <code>SentenceTransformer</code> model.</p>
+</section>
+<section id="evaluating-the-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="evaluating-the-model"><span class="header-section-number">2.2</span> Evaluating the model</h2>
+<div class="cell" data-execution_count="13">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model on our test data</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>trainer.evaluate()</span></code></pre></div>
+</details>
+</div>
+<pre><code>***** Running evaluation *****
+
+{'f1': 0.8772504091653028}</code></pre>
+<p>After training, the model is evaluated on the test data (test_data) using the F1 score. The goal is to assess how well the model performs in classifying movie reviews as positive or negative based on the few-shot training it received.</p>
+<p>This highlights the power of few-shot learning with SetFit. With only a limited amount of labeled data (32 labeled samples), we achieved an impressive <strong>F1 score of 0.87</strong></p>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../projects/finetuningBert/finetuningBert.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Fine tuning a Representation Model for Binary Sentiment Classification</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../projects/Bert/bertmodel.html" class="pagination-link">
+        <span class="nav-page-text">Using a pre-trained BERT model for text prediction and analysing its self-attention scores</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
